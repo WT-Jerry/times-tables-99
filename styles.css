@@ -41,7 +41,7 @@ button:focus-visible {
   min-height: 100svh;
   overflow: hidden;
   background:
-    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 38%, var(--sky-bot) 52%, var(--grass) 52.1%, var(--grass-mid) 100%);
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 28%, var(--sky-bot) 48%, var(--grass) 48.2%, var(--grass-mid) 78%, var(--grass-dark) 100%);
 }
 
 .sparkles {
