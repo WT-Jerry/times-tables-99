@@ -1,0 +1,54 @@
+/* Hallmark · macrostructure: Game Splash · tone: playful · anchor hue: sky-cyan
+ * theme: custom (vibe: forest picnic times-tables)
+ * paper: oklch(78% 0.09 230) · accent: oklch(72% 0.13 210) · rounded-sans
+ * audience: 小學二年級 · use: 點「玩」開始 · genre: playful
+ */
+:root {
+  --sky-top: oklch(72% 0.12 230);
+  --sky-mid: oklch(80% 0.09 220);
+  --sky-bot: oklch(88% 0.06 200);
+  --grass: oklch(78% 0.17 135);
+  --grass-mid: oklch(70% 0.16 138);
+  --grass-dark: oklch(62% 0.14 140);
+  --leaf: oklch(68% 0.16 142);
+  --leaf-deep: oklch(58% 0.15 145);
+  --leaf-light: oklch(76% 0.16 135);
+  --trunk: oklch(62% 0.09 230);
+  --trunk-ink: oklch(38% 0.06 240);
+  --ink: oklch(28% 0.06 250);
+  --title-stroke: oklch(38% 0.12 250);
+  --play: oklch(74% 0.13 210);
+  --play-deep: oklch(62% 0.12 215);
+  --cream: oklch(97% 0.03 95);
+  --parent-pill: oklch(88% 0.08 130);
+  --flag-pink: oklch(72% 0.18 8);
+  --flag-orange: oklch(78% 0.16 55);
+  --flag-yellow: oklch(88% 0.14 95);
+  --flag-mint: oklch(82% 0.12 160);
+  --white: oklch(99% 0.01 100);
+  --shadow: oklch(30% 0.04 140 / 0.28);
+  --focus: oklch(55% 0.16 250);
+
+  --font-display: "M PLUS Rounded 1c", "Zen Maru Gothic", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  --text-title: clamp(1.7rem, 8.2vw, 3.1rem);
+  --text-play: clamp(1.6rem, 6.5vw, 2.4rem);
+  --text-ui: clamp(0.92rem, 3.4vw, 1.05rem);
+
+  --radius-pill: 999px;
+  --radius-card: 28px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --dur-fast: 140ms;
+  --dur-med: 280ms;
+  --hit: 48px;
+}

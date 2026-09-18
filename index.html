@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3eb4e8">
+  <title>趣味九九乘法表</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="stage" id="home">
+    <div class="sparkles" aria-hidden="true"></div>
+
+    <svg class="scene" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#46b7ea"/>
+          <stop offset="55%" stop-color="#8fd4f2"/>
+          <stop offset="100%" stop-color="#bfe7c4"/>
+        </linearGradient>
+      </defs>
+
+      <!-- far hills -->
+      <path d="M-20 520 C 60 470, 140 500, 210 455 C 280 410, 340 470, 420 440 L 420 860 L -20 860 Z" fill="#6fc35a" stroke="#2f6a28" stroke-width="6"/>
+      <path d="M-40 580 C 80 530, 180 610, 280 540 C 340 500, 400 560, 460 530 L 460 860 L -40 860 Z" fill="#7ed957" stroke="#2f6a28" stroke-width="5"/>
+
+      <!-- left tree trunk + canopy -->
+      <rect x="28" y="250" width="42" height="280" rx="16" fill="#3f8fbe" stroke="#1d4a63" stroke-width="6"/>
+      <ellipse cx="18" cy="300" rx="18" ry="70" fill="#2f7eab" stroke="#1d4a63" stroke-width="5"/>
+      <ellipse cx="80" cy="310" rx="16" ry="55" fill="#4aa3d0" stroke="#1d4a63" stroke-width="5"/>
+      <ellipse cx="48" cy="168" rx="92" ry="78" fill="#62c14a" stroke="#1f5a28" stroke-width="7"/>
+      <ellipse cx="18" cy="150" rx="70" ry="58" fill="#79d45c" stroke="#1f5a28" stroke-width="6"/>
+      <ellipse cx="92" cy="155" rx="62" ry="52" fill="#4eaf3c" stroke="#1f5a28" stroke-width="6"/>
+
+      <!-- right tree -->
+      <rect x="318" y="210" width="46" height="300" rx="16" fill="#3f8fbe" stroke="#1d4a63" stroke-width="6"/>
+      <ellipse cx="310" cy="270" rx="16" ry="64" fill="#2f7eab" stroke="#1d4a63" stroke-width="5"/>
+      <ellipse cx="372" cy="280" rx="18" ry="70" fill="#4aa3d0" stroke="#1d4a63" stroke-width="5"/>
+      <ellipse cx="342" cy="128" rx="108" ry="86" fill="#58b844" stroke="#1f5a28" stroke-width="7"/>
+      <ellipse cx="300" cy="108" rx="72" ry="60" fill="#79d45c" stroke="#1f5a28" stroke-width="6"/>
+      <ellipse cx="390" cy="118" rx="70" ry="58" fill="#4eaf3c" stroke="#1f5a28" stroke-width="6"/>
+
+      <!-- mid-left bush -->
+      <ellipse cx="70" cy="530" rx="70" ry="38" fill="#4aa83a" stroke="#1f5a28" stroke-width="5"/>
+      <ellipse cx="120" cy="545" rx="54" ry="30" fill="#67c24d" stroke="#1f5a28" stroke-width="5"/>
+
+      <!-- mid-right bush -->
+      <ellipse cx="300" cy="500" rx="80" ry="40" fill="#4aa83a" stroke="#1f5a28" stroke-width="5"/>
+      <ellipse cx="250" cy="518" rx="50" ry="28" fill="#67c24d" stroke="#1f5a28" stroke-width="5"/>
+
+      <!-- left bunting -->
+      <path d="M8 210 C 50 250, 90 200, 130 240" fill="none" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="22,218 38,218 30,248" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="48,228 64,220 60,254" fill="#ff9f43" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="72,222 90,230 78,258" fill="#ffd93d" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="98,226 116,220 110,256" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
+
+      <!-- right bunting -->
+      <path d="M250 175 C 300 215, 340 165, 400 205" fill="none" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="268,186 286,182 280,216" fill="#ff9f43" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="296,188 314,178 312,214" fill="#7be07a" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="324,180 342,186 330,218" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
+      <polygon points="352,184 372,176 368,214" fill="#ffd93d" stroke="#2a2a2a" stroke-width="3"/>
+
+      <!-- grass doodles -->
+      <path d="M30 720 q 8 -22 16 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <path d="M70 760 q 10 -26 18 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <path d="M140 800 q 8 -20 14 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <path d="M210 780 q 9 -24 16 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <path d="M300 740 q 10 -22 18 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <path d="M360 700 q 8 -18 14 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+
+    <header class="chrome">
+      <button class="icon-btn" id="btn-settings" type="button" aria-label="設定">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96c-.5-.39-1.04-.7-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.42l-.36 2.54c-.59.24-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.48a.5.5 0 0 0 .12.64L4.86 10.7c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.23.4.32.64.22l2.39-.96c.5.39 1.04.7 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.59-.24 1.13-.55 1.63-.94l2.39.96c.24.1.51 0 .64-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/>
+        </svg>
+      </button>
+      <button class="parent-btn" id="btn-parents" type="button">父母須知</button>
+    </header>
+
+    <div class="hero">
+      <h1 class="title">趣味九九乘法表</h1>
+    </div>
+
+    <div class="cast" aria-hidden="true">
+      <img class="mascot cinna" src="assets/cinna.png" alt="">
+      <img class="mascot pompom" src="assets/pompom.png" alt="">
+    </div>
+
+    <div class="play-wrap">
+      <button class="play" id="play-btn" type="button">玩</button>
+    </div>
+
+    <button class="more-games" id="btn-more" type="button" aria-label="其他遊戲">
+      <span class="peek">
+        <img class="mini-cinna" src="assets/cinna.png" alt="">
+        <img src="assets/pompom.png" alt="">
+      </span>
+      <span class="label">其他遊戲</span>
+    </button>
+  </main>
+
+  <div class="dialog" id="dlg-settings" role="dialog" aria-labelledby="settings-title" aria-modal="true">
+    <div class="card">
+      <h2 id="settings-title">設定</h2>
+      <div class="toggle-row">
+        <span>音效</span>
+        <button class="switch" id="sound-switch" type="button" aria-pressed="true" aria-label="音效開關"><i></i></button>
+      </div>
+      <label for="kid-name">小朋友怎麼稱呼（選填）</label>
+      <input id="kid-name" type="text" maxlength="8" placeholder="例如：小明" autocomplete="nickname">
+      <div class="card-actions">
+        <button class="close-card" id="btn-save-settings" type="button" data-close>好</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog" id="dlg-parents" role="dialog" aria-labelledby="parents-title" aria-modal="true">
+    <div class="card">
+      <h2 id="parents-title">父母須知</h2>
+      <ul>
+        <li>給小學二年級練習九九乘法，一次建議 10 分鐘。</li>
+        <li>不會收集小朋友的個人資料，名字只存在這台手機。</li>
+        <li>沒有廣告、沒有內購。</li>
+        <li>音效可在左上角設定關掉。</li>
+      </ul>
+      <div class="card-actions">
+        <button class="close-card" type="button" data-close>知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
