@@ -40,8 +40,11 @@ button:focus-visible {
   min-height: 100dvh;
   min-height: 100svh;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 28%, var(--sky-bot) 48%, var(--grass) 48.2%, var(--grass-mid) 78%, var(--grass-dark) 100%);
+  background-color: #3c7faa;
+  background-image: url("assets/bg.jpg");
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .sparkles {
@@ -157,15 +160,16 @@ button:focus-visible {
   position: absolute;
   left: 0;
   right: 0;
-  top: 26%;
-  height: 52%;
+  top: auto;
+  bottom: calc(env(safe-area-inset-bottom, 10px) + 92px);
+  height: auto;
   z-index: 8;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 8px;
-  padding: 0 10px;
+  gap: 4px;
+  padding: 0 8px;
 }
 
 .mascot {
@@ -177,12 +181,12 @@ button:focus-visible {
 }
 
 .cinna {
-  width: min(48vw, 210px);
+  width: min(44vw, 186px);
   animation: hop 2.8s var(--ease-in-out) infinite;
 }
 
 .pompom {
-  width: min(40vw, 168px);
+  width: min(42vw, 176px);
   animation: sway 3.4s var(--ease-in-out) infinite;
 }
 
@@ -383,8 +387,9 @@ button:focus-visible {
   }
 
   .cast {
-    top: 28%;
-    height: 48%;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom, 10px) + 80px);
+    height: auto;
   }
 
   .cinna {
