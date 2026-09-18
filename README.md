@@ -21,7 +21,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ## 這一版有什麼
 
 - 森林卡通主畫面（對齊參考遊戲的齒輪、父母須知、大顆「玩」、其他遊戲貼紙）
-- 大耳狗喜拿、布丁狗風格角色
+- 可愛狗狗角色
 - 設定：音效開關、小朋友稱呼（只存在這台裝置）
 - 父母須知
 
@@ -31,5 +31,5 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 - `index.html` 主畫面
 - `styles.css` / `tokens.css` / `app.js`
-- `assets/cinna.png` `assets/pompom.png` 角色圖
+- `assets/` 可愛狗狗角色圖
 - `assets/home-390.png` 手機直式截圖
