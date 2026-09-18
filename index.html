@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#3eb4e8">
+  <meta name="theme-color" content="#c8e8f6">
   <title>趣味九九乘法表</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,63 +15,68 @@
     <div class="sparkles" aria-hidden="true"></div>
 
     <svg class="scene" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#46b7ea"/>
-          <stop offset="55%" stop-color="#8fd4f2"/>
-          <stop offset="100%" stop-color="#bfe7c4"/>
-        </linearGradient>
-      </defs>
+      <!-- clouds -->
+      <g fill="#fff" stroke="#e8d5c4" stroke-width="3">
+        <ellipse cx="70" cy="92" rx="34" ry="16"/>
+        <ellipse cx="98" cy="96" rx="22" ry="12"/>
+        <ellipse cx="300" cy="80" rx="40" ry="18"/>
+        <ellipse cx="332" cy="84" rx="24" ry="12"/>
+      </g>
 
-      <!-- far hills -->
-      <path d="M-20 520 C 60 470, 140 500, 210 455 C 280 410, 340 470, 420 440 L 420 860 L -20 860 Z" fill="#6fc35a" stroke="#2f6a28" stroke-width="6"/>
-      <path d="M-40 580 C 80 530, 180 610, 280 540 C 340 500, 400 560, 460 530 L 460 860 L -40 860 Z" fill="#7ed957" stroke="#2f6a28" stroke-width="5"/>
+      <!-- far mint hills -->
+      <path d="M-30 500 C 50 455, 130 490, 210 450 C 290 412, 350 470, 430 445 L 430 860 L -30 860 Z" fill="#d7f0c9" stroke="#c9a07a" stroke-width="3"/>
+      <path d="M-40 560 C 70 520, 170 590, 270 530 C 340 492, 400 550, 470 525 L 470 860 L -40 860 Z" fill="#c8eab4" stroke="#c9a07a" stroke-width="3"/>
 
-      <!-- left tree trunk + canopy -->
-      <rect x="28" y="250" width="42" height="280" rx="16" fill="#3f8fbe" stroke="#1d4a63" stroke-width="6"/>
-      <ellipse cx="18" cy="300" rx="18" ry="70" fill="#2f7eab" stroke="#1d4a63" stroke-width="5"/>
-      <ellipse cx="80" cy="310" rx="16" ry="55" fill="#4aa3d0" stroke="#1d4a63" stroke-width="5"/>
-      <ellipse cx="48" cy="168" rx="92" ry="78" fill="#62c14a" stroke="#1f5a28" stroke-width="7"/>
-      <ellipse cx="18" cy="150" rx="70" ry="58" fill="#79d45c" stroke="#1f5a28" stroke-width="6"/>
-      <ellipse cx="92" cy="155" rx="62" ry="52" fill="#4eaf3c" stroke="#1f5a28" stroke-width="6"/>
+      <!-- left tree: cream trunk + round mint canopy -->
+      <rect x="46" y="230" width="32" height="150" rx="16" fill="#f0e2c4" stroke="#c9a07a" stroke-width="3.5"/>
+      <circle cx="62" cy="168" r="82" fill="#c9ebc0" stroke="#c9a07a" stroke-width="3.5"/>
+      <circle cx="24" cy="160" r="54" fill="#d8f3d0" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="100" cy="164" r="50" fill="#b7e0ae" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="62" cy="118" r="42" fill="#e4f7dc" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="30" cy="142" r="5" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
+      <circle cx="92" cy="134" r="5" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
+      <circle cx="62" cy="98" r="4.5" fill="#ffd6e7" stroke="#c9a07a" stroke-width="2"/>
 
       <!-- right tree -->
-      <rect x="318" y="210" width="46" height="300" rx="16" fill="#3f8fbe" stroke="#1d4a63" stroke-width="6"/>
-      <ellipse cx="310" cy="270" rx="16" ry="64" fill="#2f7eab" stroke="#1d4a63" stroke-width="5"/>
-      <ellipse cx="372" cy="280" rx="18" ry="70" fill="#4aa3d0" stroke="#1d4a63" stroke-width="5"/>
-      <ellipse cx="342" cy="128" rx="108" ry="86" fill="#58b844" stroke="#1f5a28" stroke-width="7"/>
-      <ellipse cx="300" cy="108" rx="72" ry="60" fill="#79d45c" stroke="#1f5a28" stroke-width="6"/>
-      <ellipse cx="390" cy="118" rx="70" ry="58" fill="#4eaf3c" stroke="#1f5a28" stroke-width="6"/>
+      <rect x="318" y="218" width="34" height="155" rx="17" fill="#f0e2c4" stroke="#c9a07a" stroke-width="3.5"/>
+      <circle cx="336" cy="148" r="88" fill="#c9ebc0" stroke="#c9a07a" stroke-width="3.5"/>
+      <circle cx="294" cy="140" r="56" fill="#d8f3d0" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="376" cy="142" r="52" fill="#b7e0ae" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="336" cy="96" r="46" fill="#e4f7dc" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="304" cy="114" r="5" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
+      <circle cx="366" cy="110" r="5" fill="#ffd6e7" stroke="#c9a07a" stroke-width="2"/>
+      <circle cx="338" cy="78" r="4.5" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
 
-      <!-- mid-left bush -->
-      <ellipse cx="70" cy="530" rx="70" ry="38" fill="#4aa83a" stroke="#1f5a28" stroke-width="5"/>
-      <ellipse cx="120" cy="545" rx="54" ry="30" fill="#67c24d" stroke="#1f5a28" stroke-width="5"/>
+      <!-- chubby mid trees -->
+      <rect x="168" y="360" width="22" height="70" rx="11" fill="#f0e2c4" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="179" cy="330" r="42" fill="#d8f3d0" stroke="#c9a07a" stroke-width="3"/>
+      <circle cx="158" cy="324" r="26" fill="#e4f7dc" stroke="#c9a07a" stroke-width="2.5"/>
+      <circle cx="200" cy="326" r="24" fill="#c9ebc0" stroke="#c9a07a" stroke-width="2.5"/>
+      <circle cx="176" cy="312" r="4" fill="#f7c5d8" stroke="#c9a07a" stroke-width="1.8"/>
 
-      <!-- mid-right bush -->
-      <ellipse cx="300" cy="500" rx="80" ry="40" fill="#4aa83a" stroke="#1f5a28" stroke-width="5"/>
-      <ellipse cx="250" cy="518" rx="50" ry="28" fill="#67c24d" stroke="#1f5a28" stroke-width="5"/>
+      <!-- tiny mid bushes -->
+      <ellipse cx="78" cy="470" rx="52" ry="24" fill="#c3e6b6" stroke="#c9a07a" stroke-width="3"/>
+      <ellipse cx="312" cy="462" rx="56" ry="26" fill="#c3e6b6" stroke="#c9a07a" stroke-width="3"/>
 
-      <!-- left bunting -->
-      <path d="M8 210 C 50 250, 90 200, 130 240" fill="none" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="22,218 38,218 30,248" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="48,228 64,220 60,254" fill="#ff9f43" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="72,222 90,230 78,258" fill="#ffd93d" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="98,226 116,220 110,256" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
+      <!-- pastel bunting -->
+      <path d="M10 214 C 48 242, 86 198, 128 228" fill="none" stroke="#c9a07a" stroke-width="2.5"/>
+      <polygon points="24,220 38,220 31,244" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="48,228 62,222 58,248" fill="#ffe3a3" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="72,218 88,224 78,248" fill="#c9ebc0" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="98,224 114,218 110,246" fill="#cde8fb" stroke="#c9a07a" stroke-width="2"/>
 
-      <!-- right bunting -->
-      <path d="M250 175 C 300 215, 340 165, 400 205" fill="none" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="268,186 286,182 280,216" fill="#ff9f43" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="296,188 314,178 312,214" fill="#7be07a" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="324,180 342,186 330,218" fill="#ff6b9d" stroke="#2a2a2a" stroke-width="3"/>
-      <polygon points="352,184 372,176 368,214" fill="#ffd93d" stroke="#2a2a2a" stroke-width="3"/>
+      <path d="M258 178 C 304 210, 344 168, 398 198" fill="none" stroke="#c9a07a" stroke-width="2.5"/>
+      <polygon points="274,186 290,182 284,208" fill="#ffe3a3" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="304,186 320,178 318,206" fill="#f7c5d8" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="332,178 348,184 338,208" fill="#cde8fb" stroke="#c9a07a" stroke-width="2"/>
+      <polygon points="358,182 376,174 372,204" fill="#c9ebc0" stroke="#c9a07a" stroke-width="2"/>
 
-      <!-- grass doodles -->
-      <path d="M30 720 q 8 -22 16 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
-      <path d="M70 760 q 10 -26 18 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
-      <path d="M140 800 q 8 -20 14 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
-      <path d="M210 780 q 9 -24 16 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
-      <path d="M300 740 q 10 -22 18 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
-      <path d="M360 700 q 8 -18 14 0" fill="none" stroke="#2f6a28" stroke-width="4" stroke-linecap="round"/>
+      <!-- grass tufts -->
+      <path d="M36 700 q 8 -16 14 0" fill="none" stroke="#9cc48a" stroke-width="3" stroke-linecap="round"/>
+      <path d="M86 748 q 9 -18 16 0" fill="none" stroke="#9cc48a" stroke-width="3" stroke-linecap="round"/>
+      <path d="M168 790 q 8 -14 14 0" fill="none" stroke="#9cc48a" stroke-width="3" stroke-linecap="round"/>
+      <path d="M250 770 q 9 -16 15 0" fill="none" stroke="#9cc48a" stroke-width="3" stroke-linecap="round"/>
+      <path d="M330 720 q 8 -15 14 0" fill="none" stroke="#9cc48a" stroke-width="3" stroke-linecap="round"/>
     </svg>
 
     <header class="chrome">
@@ -95,15 +100,9 @@
     <div class="play-wrap">
       <button class="play" id="play-btn" type="button">玩</button>
     </div>
-
-    <button class="more-games" id="btn-more" type="button" aria-label="其他遊戲">
-      <span class="peek">
-        <img class="mini-cinna" src="assets/cinna.png" alt="">
-        <img src="assets/pompom.png" alt="">
-      </span>
-      <span class="label">其他遊戲</span>
-    </button>
   </main>
+
+  <audio id="bgm" src="assets/bgm.mp3" loop preload="auto" playsinline></audio>
 
   <div class="dialog" id="dlg-settings" role="dialog" aria-labelledby="settings-title" aria-modal="true">
     <div class="card">
@@ -127,7 +126,7 @@
         <li>給小學二年級練習九九乘法，一次建議 10 分鐘。</li>
         <li>不會收集小朋友的個人資料，名字只存在這台手機。</li>
         <li>沒有廣告、沒有內購。</li>
-        <li>音效可在左上角設定關掉。</li>
+        <li>鋼琴背景音樂會循環播放，可在左上角設定關掉。</li>
       </ul>
       <div class="card-actions">
         <button class="close-card" type="button" data-close>知道了</button>

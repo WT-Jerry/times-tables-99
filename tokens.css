@@ -1,33 +1,29 @@
-/* Hallmark · macrostructure: Game Splash · tone: playful · anchor hue: sky-cyan
- * theme: custom (vibe: forest picnic times-tables)
- * paper: oklch(78% 0.09 230) · accent: oklch(72% 0.13 210) · rounded-sans
- * audience: 小學二年級 · use: 點「玩」開始 · genre: playful
- */
 :root {
-  --sky-top: oklch(72% 0.12 230);
-  --sky-mid: oklch(80% 0.09 220);
-  --sky-bot: oklch(88% 0.06 200);
-  --grass: oklch(78% 0.17 135);
-  --grass-mid: oklch(70% 0.16 138);
-  --grass-dark: oklch(62% 0.14 140);
-  --leaf: oklch(68% 0.16 142);
-  --leaf-deep: oklch(58% 0.15 145);
-  --leaf-light: oklch(76% 0.16 135);
-  --trunk: oklch(62% 0.09 230);
-  --trunk-ink: oklch(38% 0.06 240);
-  --ink: oklch(28% 0.06 250);
-  --title-stroke: oklch(38% 0.12 250);
-  --play: oklch(74% 0.13 210);
-  --play-deep: oklch(62% 0.12 215);
-  --cream: oklch(97% 0.03 95);
-  --parent-pill: oklch(88% 0.08 130);
-  --flag-pink: oklch(72% 0.18 8);
-  --flag-orange: oklch(78% 0.16 55);
-  --flag-yellow: oklch(88% 0.14 95);
-  --flag-mint: oklch(82% 0.12 160);
+  --sky-top: oklch(86% 0.05 230);
+  --sky-mid: oklch(91% 0.04 210);
+  --sky-bot: oklch(94% 0.03 175);
+  --grass: oklch(90% 0.08 140);
+  --grass-mid: oklch(86% 0.08 138);
+  --grass-dark: oklch(80% 0.07 142);
+  --leaf: oklch(84% 0.08 145);
+  --leaf-deep: oklch(78% 0.08 148);
+  --leaf-light: oklch(90% 0.07 135);
+  --trunk: oklch(88% 0.04 85);
+  --trunk-ink: oklch(62% 0.05 70);
+  --ink: oklch(40% 0.04 60);
+  --title-stroke: oklch(48% 0.09 250);
+  --play: oklch(78% 0.09 210);
+  --play-deep: oklch(68% 0.09 215);
+  --cream: oklch(97% 0.02 95);
+  --parent-pill: oklch(90% 0.06 130);
+  --flag-pink: oklch(82% 0.1 12);
+  --flag-orange: oklch(86% 0.1 55);
+  --flag-yellow: oklch(92% 0.09 95);
+  --flag-mint: oklch(88% 0.08 160);
   --white: oklch(99% 0.01 100);
-  --shadow: oklch(30% 0.04 140 / 0.28);
-  --focus: oklch(55% 0.16 250);
+  --shadow: oklch(50% 0.03 80 / 0.16);
+  --focus: oklch(55% 0.12 250);
+  --mocha: oklch(62% 0.05 70);
 
   --font-display: "M PLUS Rounded 1c", "Zen Maru Gothic", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
