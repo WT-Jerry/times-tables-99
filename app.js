@@ -86,5 +86,9 @@
     closeDlg(parentsDlg);
   });
 
+  document.addEventListener("pointerdown", () => {
+    if (soundOn()) syncBgm();
+  }, { passive: true });
+
   syncBgm();
 })();
