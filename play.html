@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3c7faa">
+  <title>關卡 · 趣味九九乘法表</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+  <main class="stage play-page" id="play">
+    <header class="chrome play-chrome">
+      <button class="icon-btn" id="btn-back" type="button" aria-label="回關卡地圖">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M15.5 5.5 8 12l7.5 6.5 1.4-1.6L11.2 12l5.7-4.9z"/>
+        </svg>
+      </button>
+      <h1 class="select-title" id="play-title">乘法表</h1>
+      <span></span>
+    </header>
+
+    <section class="play-sheet">
+      <h2 id="play-heading">關卡</h2>
+      <ul class="times-list" id="times-list"></ul>
+      <p class="play-note">關卡遊戲下一回合再接，這一頁先確認有進到對的號碼。</p>
+    </section>
+
+    <div class="go-wrap">
+      <button class="go" id="back-map" type="button">回關卡地圖</button>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const n = params.get("n") || "";
+      if (!/^[1-9]$/.test(n)) {
+        location.replace("select.html");
+        return;
+      }
+      document.getElementById("play-title").textContent = n + " 的乘法表";
+      document.getElementById("play-heading").textContent = n + " 的乘法表";
+      const list = document.getElementById("times-list");
+      for (let i = 1; i <= 9; i += 1) {
+        const li = document.createElement("li");
+        li.textContent = `${n} × ${i} ＝ ${n * i}`;
+        list.appendChild(li);
+      }
+      const go = () => { location.href = "select.html"; };
+      document.getElementById("btn-back").addEventListener("click", go);
+      document.getElementById("back-map").addEventListener("click", go);
+    })();
+  </script>
+</body>
+</html>

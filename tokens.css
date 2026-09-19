@@ -28,6 +28,19 @@
   --hill-far: #6db298;
   --hill-mid: #59969d;
   --hill-near: #4a8a78;
+  --ball: #4aa3e0;
+  --ball-hi: #8fd0f4;
+  --ball-deep: #2b6ea8;
+  --ball-on: #ffd24a;
+  --ball-on-hi: #ffe98a;
+  --ball-on-deep: #d49212;
+  --go: #6eb4d2;
+  --go-deep: #3d7fa0;
+  --banner-ink: #c0392b;
+  --paper: #f3e6c0;
+  --paper-edge: #d7c49a;
+  --road: #cfd2c8;
+  --road-ink: #8e9188;
 
   --font-display: "M PLUS Rounded 1c", "Zen Maru Gothic", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
