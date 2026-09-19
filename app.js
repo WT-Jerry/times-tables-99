@@ -16,6 +16,7 @@
   if (bgm) {
     bgm.loop = true;
     bgm.volume = 0.38;
+    bgm.autoplay = true;
   }
 
   function soundOn() {
@@ -79,21 +80,11 @@
     }, 140);
   });
 
-  document.addEventListener("pointerdown", () => {
-    if (soundOn()) syncBgm();
-  }, { passive: true });
-
-  let toastTimer;
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add("is-on");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("is-on"), 2200);
-  }
-
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     closeDlg(settingsDlg);
     closeDlg(parentsDlg);
   });
+
+  syncBgm();
 })();

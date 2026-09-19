@@ -17,6 +17,7 @@
   if (bgm) {
     bgm.loop = true;
     bgm.volume = 0.38;
+    bgm.autoplay = true;
   }
 
   let selected = "";
@@ -123,10 +124,6 @@
     }, 120);
   });
 
-  document.addEventListener("pointerdown", () => {
-    if (soundOn()) syncBgm();
-  }, { passive: true });
-
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeDlg(settingsDlg);
@@ -136,4 +133,6 @@
     if (!/^[1-9]$/.test(e.key)) return;
     applySelect(e.key, true);
   });
+
+  syncBgm();
 })();
