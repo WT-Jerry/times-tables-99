@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="game.css?v=2">
 </head>
 <body>
   <main class="stage select-page" id="select">
     <div class="shot">
-      <img src="assets/select-ref.jpg" alt="趣味九九乘法表關卡選擇">
+      <img src="assets/select-ref.jpg?v=2" alt="趣味九九乘法表關卡選擇">
 
       <button class="hit hit-x" id="btn-back" type="button" aria-label="回主畫面"></button>
       <button class="hit hit-gear" id="btn-settings" type="button" aria-label="設定"></button>
@@ -30,6 +30,7 @@
         <button class="level" type="button" role="radio" aria-checked="false" data-n="7">7</button>
         <button class="level" type="button" role="radio" aria-checked="false" data-n="8">8</button>
         <button class="level" type="button" role="radio" aria-checked="false" data-n="9">9</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="mix" aria-label="混合挑戰">?</button>
       </div>
 
       <button class="hit hit-go" id="go-btn" type="button">開始挑戰</button>
@@ -69,6 +70,6 @@
   </div>
 
   <div class="toast" id="toast" role="status"></div>
-  <script src="select.js"></script>
+  <script src="select.js?v=2"></script>
 </body>
 </html>

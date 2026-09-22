@@ -5,11 +5,12 @@
 
   const params = new URLSearchParams(location.search);
   const n = params.get("n") || "";
-  if (!/^[1-9]$/.test(n)) {
+  const isMix = n === "mix";
+  if (!/^[1-9]$/.test(n) && !isMix) {
     location.replace("select.html");
     return;
   }
-  const level = Number(n);
+  const level = isMix ? 0 : Number(n);
 
   const equationEl = $("#equation");
   const choicesEl = $("#choices");
@@ -109,7 +110,31 @@
     });
   }
 
-  let questions = buildQuestions(level);
+  function buildMixQuestions() {
+    const pairs = [];
+    for (let a = 1; a <= 9; a += 1) {
+      for (let b = 1; b <= 9; b += 1) {
+        pairs.push([a, b]);
+      }
+    }
+    return shuffle(pairs).slice(0, TOTAL).map((pair) => {
+      const a = pair[0];
+      const b = pair[1];
+      const answer = a * b;
+      return {
+        a,
+        b,
+        answer,
+        choices: makeChoices(a, b, answer)
+      };
+    });
+  }
+
+  function makeQuiz() {
+    return isMix ? buildMixQuestions() : buildQuestions(level);
+  }
+
+  let questions = makeQuiz();
   let index = 0;
   let correct = 0;
   let wrong = 0;
@@ -208,7 +233,7 @@
   $("#btn-back").addEventListener("click", goMap);
   $("#back-map").addEventListener("click", goMap);
   $("#retry").addEventListener("click", () => {
-    questions = buildQuestions(level);
+    questions = makeQuiz();
     index = 0;
     correct = 0;
     wrong = 0;

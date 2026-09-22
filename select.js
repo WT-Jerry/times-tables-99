@@ -54,8 +54,13 @@
     showToast.timer = setTimeout(() => toast.classList.remove("is-on"), 2200);
   }
 
+  function isLevel(n) {
+    const s = String(n);
+    return /^[1-9]$/.test(s) || s === "mix";
+  }
+
   function applySelect(n, persist) {
-    if (!/^[1-9]$/.test(String(n))) return;
+    if (!isLevel(n)) return;
     selected = String(n);
     balls.forEach((btn) => {
       const on = btn.dataset.n === selected;
@@ -75,8 +80,8 @@
 
   const fromHash = (location.hash || "").replace("#", "");
   const fromStore = localStorage.getItem("times99.level") || "";
-  if (/^[1-9]$/.test(fromHash)) applySelect(fromHash, true);
-  else if (/^[1-9]$/.test(fromStore)) applySelect(fromStore, false);
+  if (isLevel(fromHash)) applySelect(fromHash, true);
+  else if (isLevel(fromStore)) applySelect(fromStore, false);
 
   if (!selected && goBtn) goBtn.classList.add("is-wait");
 
@@ -130,7 +135,7 @@
       closeDlg(parentsDlg);
       return;
     }
-    if (!/^[1-9]$/.test(e.key)) return;
+    if (!isLevel(e.key)) return;
     applySelect(e.key, true);
   });
 

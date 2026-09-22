@@ -142,15 +142,32 @@
   pointer-events: none;
 }
 
-.level[data-n="1"] { left: 18.2%; top: 23.8%; }
-.level[data-n="2"] { left: 39.2%; top: 35.5%; }
-.level[data-n="3"] { left: 35.0%; top: 43.6%; }
-.level[data-n="4"] { left: 44.2%; top: 49.0%; }
-.level[data-n="5"] { left: 58.8%; top: 48.5%; }
-.level[data-n="6"] { left: 73.0%; top: 57.6%; }
-.level[data-n="7"] { left: 37.2%; top: 58.4%; }
-.level[data-n="8"] { left: 26.2%; top: 67.0%; }
-.level[data-n="9"] { left: 57.2%; top: 70.8%; }
+.level[data-n="1"] { left: 18.2%; top: 24.2%; }
+.level[data-n="2"] { left: 39.8%; top: 35.1%; }
+.level[data-n="3"] { left: 33.7%; top: 43.7%; }
+.level[data-n="4"] { left: 43.9%; top: 48.3%; }
+.level[data-n="5"] { left: 57.6%; top: 47.9%; }
+.level[data-n="6"] { left: 74.5%; top: 56.9%; }
+.level[data-n="7"] { left: 36.8%; top: 58.5%; }
+.level[data-n="8"] { left: 26.4%; top: 67.0%; }
+.level[data-n="9"] { left: 44.2%; top: 70.8%; }
+.level[data-n="mix"] { left: 62.2%; top: 70.9%; }
+
+.level[data-n="mix"].is-on {
+  background:
+    radial-gradient(circle at 32% 28%, #ffe08a, #ff5fb1 48%, #9b4dff 82%);
+  color: #fff;
+  border: 3px solid #6a1b7a;
+  text-shadow: 0 1px 0 rgba(40, 10, 50, 0.4);
+  box-shadow:
+    0 0 0 7px oklch(75% 0.22 330 / 0.42),
+    0 0 22px 6px oklch(70% 0.24 330 / 0.55),
+    0 4px 0 #7a1870;
+}
+
+.level[data-n="mix"].is-on::after {
+  border-color: oklch(78% 0.18 330 / 0.75);
+}
 
 .stage.quiz-page {
   display: flex;
