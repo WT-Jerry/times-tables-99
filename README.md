@@ -14,12 +14,12 @@ https://wt-jerry.github.io/times-tables-99/
 - 可愛狗狗角色
 - 設定：音效開關、小朋友稱呼（只存在這台裝置）
 - 關卡選擇：點 1～9，一次只能選一顆；選好後按「開始挑戰」
-- 關卡頁目前先確認有進到對的號碼，題目下一回合再接
+- 關卡 1～9 是測驗：每次 10 題亂數四選一，結束後看答對／答錯題數
 
 ## 檔案
 
 - `index.html` 主畫面
 - `select.html` 關卡選擇
-- `play.html` 關卡頁
+- `play.html` / `play.js` 測驗頁
 - `styles.css` / `game.css` / `tokens.css` / `app.js` / `select.js`
 - `assets/` 背景、角色與選關底圖
