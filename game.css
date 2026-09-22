@@ -501,7 +501,7 @@
   background: linear-gradient(180deg, #62c8f4, #3aaee6);
   border: 5px solid #fff;
   border-radius: 28px;
-  padding: 20px 16px 8px;
+  padding: 20px 16px 16px;
   text-align: center;
   box-shadow: 0 10px 0 rgba(20, 50, 80, 0.18);
 }
@@ -530,17 +530,18 @@
   font-style: normal;
 }
 
+.remember-art {
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 2px 4px 0;
+}
+
 .remember-dog {
   display: block;
-  position: relative;
-  left: auto;
-  bottom: auto;
-  transform: none;
-  width: min(46vw, 176px);
+  width: min(42vw, 156px);
   height: auto;
-  margin: 4px auto -22px;
+  margin: 0 auto;
   pointer-events: none;
-  filter: drop-shadow(0 4px 0 rgba(20, 40, 70, 0.12));
 }
 
 .remember-next {
@@ -574,8 +575,7 @@
 
 @media (max-height: 600px) {
   .remember-dog {
-    width: min(40vw, 140px);
-    margin-bottom: -16px;
+    width: min(38vw, 128px);
   }
 }
 
