@@ -21,6 +21,10 @@
   const toast = $("#toast");
   const bgm = $("#bgm");
   const hintBtn = $("#btn-hint");
+  const rememberEl = $("#remember");
+  const rememberEq = $("#remember-eq");
+  const rememberDog = $("#remember-dog");
+  const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
 
   const kidName = (localStorage.getItem("times99.name") || "").trim();
 
@@ -164,6 +168,24 @@
     return `${item.a} 個 ${item.b} 加起來是多少？`;
   }
 
+  function hideRemember() {
+    rememberEl.hidden = true;
+  }
+
+  function showRemember(item, dogPick) {
+    const pick = dogPick === 0 || dogPick === 1
+      ? dogPick
+      : Math.floor(Math.random() * DOGS.length);
+    rememberEq.innerHTML = `${item.a} × ${item.b} = <em>${item.answer}</em>`;
+    rememberDog.src = DOGS[pick];
+    rememberEl.hidden = false;
+  }
+
+  function afterAnswer() {
+    if (index >= TOTAL) finish();
+    else renderQuestion();
+  }
+
   function renderQuestion() {
     locked = false;
     hintUsed = false;
@@ -188,6 +210,7 @@
     setMeter();
     bodyEl.hidden = true;
     resultEl.hidden = false;
+    hideRemember();
     document.getElementById("quiz").classList.add("is-done");
 
     const who = kidName ? `${kidName}，` : "";
@@ -216,18 +239,18 @@
     if (ok) {
       btn.classList.add("is-ok");
       correct += 1;
+      index += 1;
+      setMeter();
+      window.setTimeout(afterAnswer, 650);
     } else {
       btn.classList.add("is-bad");
       wrong += 1;
       hearts = Math.max(0, hearts - 1);
       setHearts();
+      index += 1;
+      setMeter();
+      showRemember(item);
     }
-    index += 1;
-    setMeter();
-    window.setTimeout(() => {
-      if (index >= TOTAL) finish();
-      else renderQuestion();
-    }, 650);
   }
 
   $("#btn-back").addEventListener("click", goMap);
@@ -241,14 +264,22 @@
     locked = false;
     resultEl.hidden = true;
     bodyEl.hidden = false;
+    hideRemember();
     document.getElementById("quiz").classList.remove("is-done");
     renderQuestion();
     syncBgm();
   });
 
+  $("#remember-next").addEventListener("click", () => {
+    syncBgm();
+    hideRemember();
+    afterAnswer();
+  });
+
   hintBtn.addEventListener("click", () => {
     syncBgm();
     if (resultEl.hidden === false) return;
+    if (rememberEl.hidden === false) return;
     if (hintUsed) {
       showToast("這一題提示過了，選一個答案吧！");
       return;
