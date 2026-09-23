@@ -18,6 +18,16 @@
   const resultDog = $("#result-dog");
   const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
   const WIN_DOGS = ["assets/win-yellow.png", "assets/win-white.png"];
+  const winReady = WIN_DOGS.map((src) => {
+    const img = new Image();
+    img.decoding = "async";
+    const ready = new Promise((resolve) => {
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    });
+    img.src = src;
+    return ready;
+  });
 
   let n = "";
   let isMix = false;
@@ -183,7 +193,10 @@
     setMeter();
   }
 
+  let revealId = 0;
+
   function hideWinDog() {
+    revealId += 1;
     if (resultCelebrate) resultCelebrate.hidden = true;
     resultEl.classList.remove("is-perfect");
   }
@@ -198,22 +211,47 @@
     resultCelebrate.style.height = `${Math.max(64, gap)}px`;
   }
 
-  function showWinDog() {
-    const pick = Math.floor(Math.random() * WIN_DOGS.length);
-    resultDog.src = WIN_DOGS[pick];
+  function primeWinDog() {
+    const src = WIN_DOGS[Math.floor(Math.random() * WIN_DOGS.length)];
+    if (resultDog.getAttribute("src") !== src) resultDog.src = src;
+    if (resultDog.decode) resultDog.decode().catch(() => {});
+  }
+
+  function dogReady() {
+    if (resultDog.complete && resultDog.naturalWidth > 0) return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => resolve();
+      resultDog.addEventListener("load", done, { once: true });
+      resultDog.addEventListener("error", done, { once: true });
+    });
+  }
+
+  async function revealPerfect() {
+    const my = revealId;
+    if (!resultDog.getAttribute("src")) resultDog.src = WIN_DOGS[0];
+    const src = resultDog.getAttribute("src");
+    const idx = Math.max(0, WIN_DOGS.indexOf(src));
+    await Promise.race([
+      Promise.all([winReady[idx], dogReady()]),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ]);
+    if (my !== revealId) return;
+    if (resultDog.decode) {
+      try { await resultDog.decode(); } catch (e) { /* 解碼失敗仍顯示文字 */ }
+    }
+    if (my !== revealId) return;
     resultCelebrate.hidden = false;
     resultEl.classList.add("is-perfect");
-    requestAnimationFrame(placeWinDog);
+    bodyEl.hidden = true;
+    resultEl.hidden = false;
+    view.classList.add("is-done");
+    placeWinDog();
   }
 
   function finish() {
     locked = true;
     setMeter();
-    bodyEl.hidden = true;
-    resultEl.hidden = false;
     hideRemember();
-    hideWinDog();
-    view.classList.add("is-done");
 
     const kidName = (localStorage.getItem("times99.name") || "").trim();
     const who = kidName ? `${kidName}，` : "";
@@ -223,8 +261,15 @@
     if (correct === TOTAL) {
       $("#score-line").textContent = `${who}全部答對 ${correct} 題`;
       $("#score-sub").textContent = "太厲害了！";
-      showWinDog();
-    } else if (kidName) {
+      revealPerfect();
+      return;
+    }
+
+    hideWinDog();
+    bodyEl.hidden = true;
+    resultEl.hidden = false;
+    view.classList.add("is-done");
+    if (kidName) {
       $("#score-line").textContent = `${who}答對 ${correct} 題`;
     }
   }
@@ -278,6 +323,7 @@
     hideRemember();
     hideWinDog();
     view.classList.remove("is-done");
+    primeWinDog();
     renderQuestion();
     activeN = n;
     hasRun = true;
