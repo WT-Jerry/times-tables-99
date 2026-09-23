@@ -14,7 +14,10 @@
   const rememberEl = $("#remember");
   const rememberEq = $("#remember-eq");
   const rememberDog = $("#remember-dog");
+  const resultCelebrate = $("#result-celebrate");
+  const resultDog = $("#result-dog");
   const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
+  const WIN_DOGS = ["assets/win-yellow.png", "assets/win-white.png"];
 
   let n = "";
   let isMix = false;
@@ -180,12 +183,36 @@
     setMeter();
   }
 
+  function hideWinDog() {
+    if (resultCelebrate) resultCelebrate.hidden = true;
+    resultEl.classList.remove("is-perfect");
+  }
+
+  function placeWinDog() {
+    if (!resultCelebrate || resultCelebrate.hidden) return;
+    const title = resultEl.querySelector("h2");
+    if (!title) return;
+    const box = resultEl.getBoundingClientRect();
+    const titleBox = title.getBoundingClientRect();
+    const gap = titleBox.top - box.top - 12;
+    resultCelebrate.style.height = `${Math.max(64, gap)}px`;
+  }
+
+  function showWinDog() {
+    const pick = Math.floor(Math.random() * WIN_DOGS.length);
+    resultDog.src = WIN_DOGS[pick];
+    resultCelebrate.hidden = false;
+    resultEl.classList.add("is-perfect");
+    requestAnimationFrame(placeWinDog);
+  }
+
   function finish() {
     locked = true;
     setMeter();
     bodyEl.hidden = true;
     resultEl.hidden = false;
     hideRemember();
+    hideWinDog();
     view.classList.add("is-done");
 
     const kidName = (localStorage.getItem("times99.name") || "").trim();
@@ -196,6 +223,7 @@
     if (correct === TOTAL) {
       $("#score-line").textContent = `${who}全部答對 ${correct} 題`;
       $("#score-sub").textContent = "太厲害了！";
+      showWinDog();
     } else if (kidName) {
       $("#score-line").textContent = `${who}答對 ${correct} 題`;
     }
@@ -248,6 +276,7 @@
     resultEl.hidden = true;
     bodyEl.hidden = false;
     hideRemember();
+    hideWinDog();
     view.classList.remove("is-done");
     renderQuestion();
     activeN = n;
@@ -276,6 +305,10 @@
     }
     hintUsed = true;
     showToast(hintText(questions[index]));
+  });
+
+  window.addEventListener("resize", () => {
+    if (resultEl.classList.contains("is-perfect")) placeWinDog();
   });
 
   window.Times99Quiz = {

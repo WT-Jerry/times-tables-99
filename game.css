@@ -421,6 +421,33 @@
   display: none !important;
 }
 
+.result-celebrate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.result-celebrate[hidden] {
+  display: none !important;
+}
+
+.result-dog {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(56vw, 210px);
+  max-height: 86%;
+  object-fit: contain;
+  object-position: center;
+}
+
 .quiz-result h2 {
   margin: 0 0 6px;
   font-family: var(--font-display);
