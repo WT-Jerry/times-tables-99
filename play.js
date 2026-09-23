@@ -2,15 +2,7 @@
   const TOTAL = 10;
   const LIVES = 3;
   const $ = (sel) => document.querySelector(sel);
-
-  const params = new URLSearchParams(location.search);
-  const n = params.get("n") || "";
-  const isMix = n === "mix";
-  if (!/^[1-9]$/.test(n) && !isMix) {
-    location.replace("select.html");
-    return;
-  }
-  const level = isMix ? 0 : Number(n);
+  const view = $("#view-play");
 
   const equationEl = $("#equation");
   const choicesEl = $("#choices");
@@ -18,42 +10,33 @@
   const meterFill = $("#meter-fill");
   const resultEl = $("#result");
   const bodyEl = $("#quiz-body");
-  const toast = $("#toast");
-  const bgm = $("#bgm");
   const hintBtn = $("#btn-hint");
   const rememberEl = $("#remember");
   const rememberEq = $("#remember-eq");
   const rememberDog = $("#remember-dog");
   const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
 
-  const kidName = (localStorage.getItem("times99.name") || "").trim();
+  let n = "";
+  let isMix = false;
+  let level = 0;
+  let activeN = "";
+  let hasRun = false;
+  let runId = 0;
 
-  if (bgm) {
-    bgm.loop = true;
-    bgm.volume = 0.38;
-    bgm.autoplay = true;
-  }
-
-  function soundOn() {
-    return localStorage.getItem("times99.sound") !== "off";
-  }
+  let questions = [];
+  let index = 0;
+  let correct = 0;
+  let wrong = 0;
+  let hearts = LIVES;
+  let locked = false;
+  let hintUsed = false;
 
   function syncBgm() {
-    if (!bgm) return;
-    if (soundOn()) {
-      const p = bgm.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    } else {
-      bgm.pause();
-    }
+    if (window.Times99) Times99.syncBgm();
   }
 
   function showToast(msg) {
-    if (!toast) return;
-    toast.textContent = msg;
-    toast.classList.add("is-on");
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => toast.classList.remove("is-on"), 2200);
+    if (window.Times99) Times99.toast(msg);
   }
 
   function shuffle(list) {
@@ -138,16 +121,8 @@
     return isMix ? buildMixQuestions() : buildQuestions(level);
   }
 
-  let questions = makeQuiz();
-  let index = 0;
-  let correct = 0;
-  let wrong = 0;
-  let hearts = LIVES;
-  let locked = false;
-  let hintUsed = false;
-
   function goMap() {
-    location.href = "select.html";
+    Times99.goBack("select", isMix ? "mix" : String(level || ""));
   }
 
   function setHearts() {
@@ -211,8 +186,9 @@
     bodyEl.hidden = true;
     resultEl.hidden = false;
     hideRemember();
-    document.getElementById("quiz").classList.add("is-done");
+    view.classList.add("is-done");
 
+    const kidName = (localStorage.getItem("times99.name") || "").trim();
     const who = kidName ? `${kidName}，` : "";
     $("#score-line").textContent = `答對 ${correct} 題`;
     $("#score-sub").textContent = `答錯 ${wrong} 題`;
@@ -241,7 +217,11 @@
       correct += 1;
       index += 1;
       setMeter();
-      window.setTimeout(afterAnswer, 650);
+      const my = runId;
+      window.setTimeout(() => {
+        if (my !== runId) return;
+        afterAnswer();
+      }, 650);
     } else {
       btn.classList.add("is-bad");
       wrong += 1;
@@ -253,33 +233,43 @@
     }
   }
 
-  $("#btn-back").addEventListener("click", goMap);
-  $("#back-map").addEventListener("click", goMap);
-  $("#retry").addEventListener("click", () => {
+  function begin(nextN) {
+    runId += 1;
+    n = String(nextN);
+    isMix = n === "mix";
+    level = isMix ? 0 : Number(n);
     questions = makeQuiz();
     index = 0;
     correct = 0;
     wrong = 0;
     hearts = LIVES;
     locked = false;
+    hintUsed = false;
     resultEl.hidden = true;
     bodyEl.hidden = false;
     hideRemember();
-    document.getElementById("quiz").classList.remove("is-done");
+    view.classList.remove("is-done");
     renderQuestion();
+    activeN = n;
+    hasRun = true;
+  }
+
+  $("#btn-back").addEventListener("click", goMap);
+  $("#back-map").addEventListener("click", goMap);
+  $("#retry").addEventListener("click", () => {
+    begin(isMix ? "mix" : String(level));
     syncBgm();
   });
-
   $("#remember-next").addEventListener("click", () => {
     syncBgm();
     hideRemember();
     afterAnswer();
   });
-
   hintBtn.addEventListener("click", () => {
     syncBgm();
     if (resultEl.hidden === false) return;
     if (rememberEl.hidden === false) return;
+    if (!questions[index]) return;
     if (hintUsed) {
       showToast("這一題提示過了，選一個答案吧！");
       return;
@@ -288,14 +278,11 @@
     showToast(hintText(questions[index]));
   });
 
-  document.addEventListener("pointerdown", () => {
-    if (soundOn()) syncBgm();
-  }, { passive: true });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") goMap();
-  });
-
-  renderQuestion();
-  syncBgm();
+  window.Times99Quiz = {
+    onShow(nextN, opts) {
+      const fresh = !opts || opts.fresh !== false;
+      if (!fresh && hasRun && activeN === String(nextN)) return;
+      begin(nextN);
+    },
+  };
 })();

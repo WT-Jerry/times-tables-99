@@ -11,7 +11,7 @@ https://wt-jerry.github.io/times-tables-99/
 ## 這一版有什麼
 
 - 森林卡通主畫面（齒輪、父母須知、大顆「玩」）
-- 可愛狗狗角色
+- 鋼琴背景音樂循環播放，主頁、選關、測驗切換時不中斷
 - 設定：音效開關、小朋友稱呼（只存在這台裝置）
 - 關卡選擇：點 1～9 或紅球問號，一次只能選一顆；選好後按「開始挑戰」
 - 關卡 1～9 是該數的乘法測驗：每次 10 題亂數四選一
@@ -21,8 +21,8 @@ https://wt-jerry.github.io/times-tables-99/
 
 ## 檔案
 
-- `index.html` 主畫面
-- `select.html` 關卡選擇
-- `play.html` / `play.js` 測驗頁
-- `styles.css` / `game.css` / `tokens.css` / `app.js` / `select.js`
+- `index.html` 殼：主畫面、選關、測驗在同一頁，背景音樂不換頁
+- `select.html` / `play.html` 舊網址轉進殼
+- `shell.js` 切畫面與音樂
+- `styles.css` / `game.css` / `tokens.css` / `app.js` / `select.js` / `play.js`
 - `assets/` 背景、角色與選關底圖

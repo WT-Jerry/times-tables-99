@@ -1,62 +1,19 @@
 (() => {
   const $ = (sel) => document.querySelector(sel);
-
-  const settingsDlg = $("#dlg-settings");
-  const parentsDlg = $("#dlg-parents");
   const toast = $("#toast");
-  const soundBtn = $("#sound-switch");
-  const nameInput = $("#kid-name");
-  const bgm = $("#bgm");
   const goBtn = $("#go-btn");
-  const balls = Array.from(document.querySelectorAll(".level"));
-
-  const savedName = localStorage.getItem("times99.name") || "";
-  const savedSound = localStorage.getItem("times99.sound") !== "off";
-  if (nameInput) nameInput.value = savedName;
-  if (soundBtn) soundBtn.setAttribute("aria-pressed", savedSound ? "true" : "false");
-  if (bgm) {
-    bgm.loop = true;
-    bgm.volume = 0.38;
-    bgm.autoplay = true;
-  }
+  const balls = Array.from(document.querySelectorAll("#view-select .level"));
 
   let selected = "";
 
-  function soundOn() {
-    return soundBtn && soundBtn.getAttribute("aria-pressed") === "true";
-  }
-
-  function syncBgm() {
-    if (!bgm) return;
-    if (soundOn()) {
-      const p = bgm.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    } else {
-      bgm.pause();
-    }
-  }
-
-  function openDlg(el) {
-    el.classList.add("is-open");
-    const close = el.querySelector("[data-close]");
-    if (close) close.focus();
-  }
-
-  function closeDlg(el) {
-    el.classList.remove("is-open");
+  function isLevel(n) {
+    const s = String(n || "");
+    return /^[1-9]$/.test(s) || s === "mix";
   }
 
   function showToast(msg) {
-    if (!toast) return;
-    toast.textContent = msg;
-    toast.classList.add("is-on");
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => toast.classList.remove("is-on"), 2200);
-  }
-
-  function isLevel(n) {
-    const s = String(n);
-    return /^[1-9]$/.test(s) || s === "mix";
+    if (window.Times99) Times99.toast(msg);
+    else if (toast) toast.textContent = msg;
   }
 
   function applySelect(n, persist) {
@@ -74,70 +31,56 @@
   balls.forEach((btn) => {
     btn.addEventListener("click", () => {
       applySelect(btn.dataset.n, true);
-      syncBgm();
+      if (window.Times99) {
+        Times99.syncBgm();
+        Times99.syncSelectUrl(selected);
+      }
     });
   });
 
-  const fromHash = (location.hash || "").replace("#", "");
+  const bootN = new URLSearchParams(location.search).get("n") || "";
   const fromStore = localStorage.getItem("times99.level") || "";
-  if (isLevel(fromHash)) applySelect(fromHash, true);
+  if (location.search.indexOf("view=select") !== -1 && isLevel(bootN)) applySelect(bootN, false);
   else if (isLevel(fromStore)) applySelect(fromStore, false);
-
   if (!selected && goBtn) goBtn.classList.add("is-wait");
 
-  $("#btn-back").addEventListener("click", () => {
-    window.location.href = "index.html";
+  $("#map-back").addEventListener("click", () => {
+    Times99.goBack("home");
   });
+  $("#map-settings").addEventListener("click", () => Times99.openSettings());
+  $("#map-parents").addEventListener("click", () => Times99.openParents());
 
-  $("#btn-settings").addEventListener("click", () => openDlg(settingsDlg));
-  $("#btn-parents").addEventListener("click", () => openDlg(parentsDlg));
-
-  document.querySelectorAll("[data-close]").forEach((btn) => {
-    btn.addEventListener("click", () => closeDlg(btn.closest(".dialog")));
-  });
-  document.querySelectorAll(".dialog").forEach((dlg) => {
-    dlg.addEventListener("click", (e) => {
-      if (e.target === dlg) closeDlg(dlg);
-    });
-  });
-
-  soundBtn.addEventListener("click", () => {
-    const on = !soundOn();
-    soundBtn.setAttribute("aria-pressed", on ? "true" : "false");
-    localStorage.setItem("times99.sound", on ? "on" : "off");
-    syncBgm();
-  });
-
-  nameInput.addEventListener("change", () => {
-    localStorage.setItem("times99.name", nameInput.value.trim());
-  });
-  $("#btn-save-settings").addEventListener("click", () => {
-    localStorage.setItem("times99.name", nameInput.value.trim());
-    closeDlg(settingsDlg);
-  });
-
+  let leaving = false;
   goBtn.addEventListener("click", () => {
+    if (leaving) return;
     goBtn.classList.add("is-down");
-    syncBgm();
+    Times99.syncBgm();
     if (!selected) {
       showToast("先點一個號碼球喔！");
       setTimeout(() => goBtn.classList.remove("is-down"), 160);
       return;
     }
+    leaving = true;
     setTimeout(() => {
-      window.location.href = `play.html?n=${encodeURIComponent(selected)}`;
+      leaving = false;
+      goBtn.classList.remove("is-down");
+      Times99.show("play", selected, "push");
     }, 120);
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeDlg(settingsDlg);
-      closeDlg(parentsDlg);
-      return;
-    }
+    if (document.body.dataset.view !== "select") return;
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (document.querySelector(".dialog.is-open")) return;
     if (!isLevel(e.key)) return;
     applySelect(e.key, true);
+    Times99.syncSelectUrl(selected);
   });
 
-  syncBgm();
+  window.Times99Select = {
+    selected() { return selected; },
+    onShow(n) {
+      if (isLevel(n)) applySelect(n, false);
+    },
+  };
 })();

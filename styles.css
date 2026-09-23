@@ -411,6 +411,10 @@ button:focus-visible {
   .play { min-width: 52vw; letter-spacing: 0.1em; }
 }
 
+.stage[hidden] {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cinna,
   .pompom,

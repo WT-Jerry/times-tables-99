@@ -2,74 +2,22 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#5a8eb0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>關卡選擇 · 趣味九九乘法表</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="game.css?v=2">
+  <script>
+    (function () {
+      var n = (location.hash || "").replace(/^#/, "");
+      if (!/^[1-9]$/.test(n) && n !== "mix") {
+        var q = new URLSearchParams(location.search).get("n") || "";
+        if (/^[1-9]$/.test(q) || q === "mix") n = q;
+      }
+      var dest = "index.html?view=select";
+      if (/^[1-9]$/.test(n) || n === "mix") dest += "&n=" + encodeURIComponent(n);
+      location.replace(dest);
+    })();
+  </script>
 </head>
 <body>
-  <main class="stage select-page" id="select">
-    <div class="shot">
-      <img src="assets/select-ref.jpg?v=2" alt="趣味九九乘法表關卡選擇">
-
-      <button class="hit hit-x" id="btn-back" type="button" aria-label="回主畫面"></button>
-      <button class="hit hit-gear" id="btn-settings" type="button" aria-label="設定"></button>
-      <button class="hit hit-parent" id="btn-parents" type="button" aria-label="父母須知"></button>
-
-      <div class="levels" role="radiogroup" aria-label="選擇乘法表關卡">
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="1">1</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="2">2</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="3">3</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="4">4</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="5">5</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="6">6</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="7">7</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="8">8</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="9">9</button>
-        <button class="level" type="button" role="radio" aria-checked="false" data-n="mix" aria-label="混合挑戰">?</button>
-      </div>
-
-      <button class="hit hit-go" id="go-btn" type="button">開始挑戰</button>
-    </div>
-  </main>
-
-  <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
-
-  <div class="dialog" id="dlg-settings" role="dialog" aria-labelledby="settings-title" aria-modal="true">
-    <div class="card">
-      <h2 id="settings-title">設定</h2>
-      <div class="toggle-row">
-        <span>音效</span>
-        <button class="switch" id="sound-switch" type="button" aria-pressed="true" aria-label="音效開關"><i></i></button>
-      </div>
-      <label for="kid-name">小朋友怎麼稱呼（選填）</label>
-      <input id="kid-name" type="text" maxlength="8" placeholder="例如：小明" autocomplete="nickname">
-      <div class="card-actions">
-        <button class="close-card" id="btn-save-settings" type="button" data-close>好</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="dialog" id="dlg-parents" role="dialog" aria-labelledby="parents-title" aria-modal="true">
-    <div class="card">
-      <h2 id="parents-title">父母須知</h2>
-      <ul>
-        <li>給小學二年級練習九九乘法，一次建議 10 分鐘。</li>
-        <li>不會收集小朋友的個人資料，名字只存在這台手機。</li>
-        <li>沒有廣告、沒有內購。</li>
-        <li>鋼琴背景音樂會循環播放，可在設定關掉。</li>
-      </ul>
-      <div class="card-actions">
-        <button class="close-card" type="button" data-close>知道了</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast" role="status"></div>
-  <script src="select.js?v=2"></script>
+  <p><a href="index.html?view=select">前往關卡選擇</a></p>
 </body>
 </html>

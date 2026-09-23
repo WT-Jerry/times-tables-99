@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-bgm-shell="persist">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#3c7faa">
   <title>趣味九九乘法表</title>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var v = q.get("view");
+      if (v === "select" || v === "play") document.documentElement.dataset.boot = v;
+    })();
+  </script>
+  <style>
+    html[data-boot="select"] #view-home,
+    html[data-boot="play"] #view-home,
+    html[data-boot="select"] #view-play,
+    html[data-boot="play"] #view-select { display: none !important; }
+    html[data-boot="select"] #view-select { display: block !important; }
+    html[data-boot="play"] #view-play { display: flex !important; }
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="game.css?v=4">
 </head>
 <body>
-  <main class="stage" id="home">
+  <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
+
+  <main class="stage" id="view-home">
     <header class="chrome">
-      <button class="icon-btn" id="btn-settings" type="button" aria-label="設定">
+      <button class="icon-btn" id="home-settings" type="button" aria-label="設定">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96c-.5-.39-1.04-.7-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.42l-.36 2.54c-.59.24-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.48a.5.5 0 0 0 .12.64L4.86 10.7c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.23.4.32.64.22l2.39-.96c.5.39 1.04.7 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.59-.24 1.13-.55 1.63-.94l2.39.96c.24.1.51 0 .64-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/>
         </svg>
       </button>
-      <button class="parent-btn" id="btn-parents" type="button">父母須知</button>
+      <button class="parent-btn" id="home-parents" type="button">父母須知</button>
     </header>
 
     <div class="hero">
@@ -35,7 +53,92 @@
     </div>
   </main>
 
-  <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
+  <main class="stage select-page" id="view-select" hidden>
+    <div class="shot">
+      <img src="assets/select-ref.jpg?v=2" alt="趣味九九乘法表關卡選擇">
+
+      <button class="hit hit-x" id="map-back" type="button" aria-label="回主畫面"></button>
+      <button class="hit hit-gear" id="map-settings" type="button" aria-label="設定"></button>
+      <button class="hit hit-parent" id="map-parents" type="button" aria-label="父母須知"></button>
+
+      <div class="levels" role="radiogroup" aria-label="選擇乘法表關卡">
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="1">1</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="2">2</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="3">3</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="4">4</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="5">5</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="6">6</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="7">7</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="8">8</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="9">9</button>
+        <button class="level" type="button" role="radio" aria-checked="false" data-n="mix" aria-label="混合挑戰">?</button>
+      </div>
+
+      <button class="hit hit-go" id="go-btn" type="button">開始挑戰</button>
+    </div>
+  </main>
+
+  <main class="stage quiz-page" id="view-play" hidden>
+    <div class="quiz-hills" aria-hidden="true"></div>
+    <div class="quiz-sparkles" aria-hidden="true"></div>
+
+    <header class="quiz-chrome">
+      <button class="quiz-back" id="btn-back" type="button" aria-label="回關卡地圖">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M15.5 5.5 8 12l7.5 6.5 1.4-1.6L11.2 12l5.7-4.9z"/>
+        </svg>
+      </button>
+      <h1 class="quiz-mode" id="quiz-mode">乘</h1>
+      <button class="quiz-hint" id="btn-hint" type="button" aria-label="提示">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <rect x="20" y="16" width="8" height="26" rx="3" fill="#c4783a"/>
+          <rect x="22" y="17" width="3" height="24" rx="1.2" fill="#e8b07a"/>
+          <rect x="8" y="6" width="32" height="16" rx="4" fill="#ff3d8a"/>
+          <rect x="11" y="9" width="10" height="10" rx="2.5" fill="#ff8ab8"/>
+          <rect x="27" y="8.5" width="10" height="11" rx="2.2" fill="#ff6aa0"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="quiz-body" id="quiz-body">
+      <div class="quiz-lives" id="lives" aria-label="剩下 3 顆愛心">
+        <svg data-heart="0" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>
+        <svg data-heart="1" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>
+        <svg data-heart="2" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>
+      </div>
+
+      <div class="quiz-meter" aria-hidden="true">
+        <b id="meter-fill"></b>
+      </div>
+
+      <p class="quiz-eq" id="equation">× = ?</p>
+
+      <div class="quiz-choices" id="choices" role="group" aria-label="選答案"></div>
+    </section>
+
+    <section class="quiz-result" id="result" hidden>
+      <h2>測驗結果</h2>
+      <p class="quiz-score" id="score-line"></p>
+      <p class="quiz-sub" id="score-sub"></p>
+      <button class="quiz-again" id="retry" type="button">再考一次</button>
+      <button class="quiz-map" id="back-map" type="button">回關卡地圖</button>
+    </section>
+
+    <div class="remember" id="remember" hidden>
+      <div class="remember-card">
+        <p class="remember-kicker">記住這個算式</p>
+        <p class="remember-eq" id="remember-eq"></p>
+        <div class="remember-art">
+          <img class="remember-dog" id="remember-dog" alt="">
+        </div>
+        <button class="remember-next" id="remember-next" type="button" aria-label="下一題">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M8.5 5.5 16 12l-7.5 6.5-1.4-1.6L12.8 12 7.1 7.1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
 
   <div class="dialog" id="dlg-settings" role="dialog" aria-labelledby="settings-title" aria-modal="true">
     <div class="card">
@@ -59,7 +162,7 @@
         <li>給小學二年級練習九九乘法，一次建議 10 分鐘。</li>
         <li>不會收集小朋友的個人資料，名字只存在這台手機。</li>
         <li>沒有廣告、沒有內購。</li>
-        <li>鋼琴背景音樂會循環播放，可在左上角設定關掉。</li>
+        <li>鋼琴背景音樂會循環播放，換畫面也不中斷，可在設定關掉。</li>
       </ul>
       <div class="card-actions">
         <button class="close-card" type="button" data-close>知道了</button>
@@ -68,6 +171,10 @@
   </div>
 
   <div class="toast" id="toast" role="status"></div>
-  <script src="app.js?v=2"></script>
+  <script src="shell.js?v=1"></script>
+  <script src="app.js?v=3"></script>
+  <script src="select.js?v=3"></script>
+  <script src="play.js?v=6"></script>
+  <script>Times99.boot()</script>
 </body>
 </html>
