@@ -18,16 +18,20 @@
   const resultDog = $("#result-dog");
   const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
   const WIN_DOGS = ["assets/win-yellow.png", "assets/win-white.png"];
-  const winReady = WIN_DOGS.map((src) => {
-    const img = new Image();
-    img.decoding = "async";
-    const ready = new Promise((resolve) => {
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
+  function preloadSet(list) {
+    return list.map((src) => {
+      const img = new Image();
+      img.decoding = "async";
+      const ready = new Promise((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
+      img.src = src;
+      return ready;
     });
-    img.src = src;
-    return ready;
-  });
+  }
+  const reviewReady = preloadSet(DOGS);
+  const winReady = preloadSet(WIN_DOGS);
 
   let n = "";
   let isMix = false;
@@ -156,16 +160,39 @@
     return `${item.a} 個 ${item.b} 加起來是多少？`;
   }
 
+  let rememberId = 0;
+
   function hideRemember() {
+    rememberId += 1;
     rememberEl.hidden = true;
   }
 
-  function showRemember(item, dogPick) {
+  function whenImageReady(img) {
+    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => resolve();
+      img.addEventListener("load", done, { once: true });
+      img.addEventListener("error", done, { once: true });
+    });
+  }
+
+  async function showRemember(item, dogPick) {
+    const my = rememberId;
     const pick = dogPick === 0 || dogPick === 1
       ? dogPick
       : Math.floor(Math.random() * DOGS.length);
+    const src = DOGS[pick];
     rememberEq.innerHTML = `${item.a} × ${item.b} = <em>${item.answer}</em>`;
-    rememberDog.src = DOGS[pick];
+    if (rememberDog.getAttribute("src") !== src) rememberDog.src = src;
+    await Promise.race([
+      Promise.all([reviewReady[pick], whenImageReady(rememberDog)]),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ]);
+    if (my !== rememberId) return;
+    if (rememberDog.decode) {
+      try { await rememberDog.decode(); } catch (e) { /* 解碼失敗仍顯示算式 */ }
+    }
+    if (my !== rememberId) return;
     rememberEl.hidden = false;
   }
 
@@ -215,6 +242,12 @@
     const src = WIN_DOGS[Math.floor(Math.random() * WIN_DOGS.length)];
     if (resultDog.getAttribute("src") !== src) resultDog.src = src;
     if (resultDog.decode) resultDog.decode().catch(() => {});
+  }
+
+  function primeReviewDog() {
+    const src = DOGS[Math.floor(Math.random() * DOGS.length)];
+    if (rememberDog.getAttribute("src") !== src) rememberDog.src = src;
+    if (rememberDog.decode) rememberDog.decode().catch(() => {});
   }
 
   function dogReady() {
@@ -324,6 +357,7 @@
     hideWinDog();
     view.classList.remove("is-done");
     primeWinDog();
+    primeReviewDog();
     renderQuestion();
     activeN = n;
     hasRun = true;
