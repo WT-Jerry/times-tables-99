@@ -41,9 +41,33 @@
     clipVideos.forEach((v, i) => {
       const src = CLIP_SRCS[i];
       if (!src) return;
-      if (v.getAttribute("src") !== src) {
-        v.preload = "auto";
-        v.src = src;
+      v.playsInline = true;
+      v.setAttribute("playsinline", "");
+      v.setAttribute("webkit-playsinline", "");
+      v.preload = "auto";
+      if (v.getAttribute("src") !== src) v.src = src;
+    });
+  }
+
+  let clipsWarm = false;
+
+  function warmClips() {
+    if (clipsWarm) return;
+    clipsWarm = true;
+    clipVideos.forEach((v) => {
+      if (!v.getAttribute("src")) return;
+      const wasMuted = v.muted;
+      v.muted = true;
+      const p = v.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          if (clipEl && clipEl.classList.contains("is-live")) return;
+          v.pause();
+          try { v.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+          v.muted = wasMuted;
+        }).catch(() => {
+          v.muted = wasMuted;
+        });
       }
     });
   }
@@ -336,16 +360,21 @@
     clipVideos.forEach((v, i) => {
       v.hidden = i !== pick;
     });
-    const sound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
-    video.muted = !sound;
+    const wantSound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
     video.playsInline = true;
-    try { video.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.muted = true;
     clipEl.classList.add("is-live");
     clipEl.classList.remove("is-leaving");
     clipEl.setAttribute("aria-hidden", "false");
     view.classList.add("is-clip");
     bodyEl.hidden = true;
-    if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
+    void clipEl.offsetWidth;
+    if (video.readyState < 2) {
+      try { video.load(); } catch (e) { /* 已在載 */ }
+    }
+    try { if (video.currentTime > 0.05) video.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
 
     let settled = false;
     const done = new Promise((resolve) => {
@@ -356,28 +385,37 @@
       };
       let playTimer = 0;
       const armEnd = () => {
-        if (playTimer || settled) return;
+        if (playTimer || settled || video.currentTime < 0.12) return;
         const dur = Number.isFinite(video.duration) && video.duration > 0.5 ? video.duration : 4.05;
-        playTimer = window.setTimeout(finishClip, dur * 1000 + 700);
+        const left = Math.max(0.35, dur - video.currentTime);
+        playTimer = window.setTimeout(finishClip, left * 1000 + 350);
+      };
+      const nudge = () => {
+        if (settled || video.currentTime > 0.12) return;
+        video.muted = true;
+        const again = video.play();
+        if (again && typeof again.catch === "function") again.catch(() => {});
       };
       video.onended = finishClip;
       video.onerror = finishClip;
-      video.onplaying = armEnd;
+      video.ontimeupdate = () => {
+        if (video.currentTime > 0.12) {
+          if (wantSound && video.muted) video.muted = false;
+          armEnd();
+        }
+      };
       const started = video.play();
-      if (started && typeof started.then === "function") {
-        started.then(armEnd).catch(() => {
-          video.muted = true;
-          const retry = video.play();
-          if (retry && typeof retry.then === "function") {
-            retry.then(armEnd).catch(() => window.setTimeout(finishClip, 350));
-          } else {
-            window.setTimeout(finishClip, 350);
-          }
-        });
+      if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
+      if (started && typeof started.catch === "function") {
+        started.catch(nudge);
       }
+      window.setTimeout(nudge, 280);
       window.setTimeout(() => {
-        if (!settled && video.currentTime < 0.15 && video.paused) finishClip();
-      }, 1800);
+        if (!settled && video.currentTime < 0.12) nudge();
+      }, 700);
+      window.setTimeout(() => {
+        if (!settled && video.currentTime < 0.12) finishClip();
+      }, 1400);
     });
 
     done.then(async () => {
@@ -450,9 +488,13 @@
   function onPick(btn, value) {
     if (locked) return;
     locked = true;
-    syncBgm();
     const item = questions[index];
     const ok = value === item.answer;
+    const willWin = ok && correct + 1 === TOTAL;
+    if (!willWin) {
+      syncBgm();
+      warmClips();
+    }
     choicesEl.querySelectorAll(".quiz-choice").forEach((el) => {
       el.disabled = true;
       const v = Number(el.dataset.value);
