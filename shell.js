@@ -5,6 +5,7 @@
     home: $("#view-home"),
     select: $("#view-select"),
     play: $("#view-play"),
+    table: $("#view-table"),
   };
   const bgm = $("#bgm");
   const theme = document.querySelector('meta[name="theme-color"]');
@@ -14,11 +15,12 @@
   const soundBtn = $("#sound-switch");
   const nameInput = $("#kid-name");
 
-  const THEME = { home: "#3c7faa", select: "#5a8eb0", play: "#6bb8e0" };
+  const THEME = { home: "#3c7faa", select: "#5a8eb0", play: "#6bb8e0", table: "#7ec8e6" };
   const TITLE = {
     home: "趣味九九乘法表",
     select: "關卡選擇 · 趣味九九乘法表",
     play: "測驗 · 趣味九九乘法表",
+    table: "99乘法表 · 趣味九九乘法表",
   };
 
   let current = { view: "home", n: "" };
@@ -79,6 +81,7 @@
     const n = q.get("n") || "";
     if (view === "play" && isLevel(n)) return { view: "play", n };
     if (view === "select") return { view: "select", n: isLevel(n) ? n : "" };
+    if (view === "table") return { view: "table", n: /^[1-9]$/.test(n) ? n : "1" };
     if (view === "play") return { view: "select", n: "" };
     return { view: "home", n: "" };
   }
@@ -90,6 +93,10 @@
     }
     if (view === "play" && isLevel(n)) {
       return `${path}?view=play&n=${encodeURIComponent(n)}`;
+    }
+    if (view === "table") {
+      const page = /^[1-9]$/.test(String(n || "")) ? String(n) : "1";
+      return `${path}?view=table&n=${page}`;
     }
     return path;
   }
@@ -130,7 +137,8 @@
     let next = view;
     let level = isLevel(n) ? String(n) : "";
     if (next === "play" && !level) next = "select";
-    if (next !== "home" && next !== "select" && next !== "play") next = "home";
+    if (next === "table" && !/^[1-9]$/.test(level)) level = "1";
+    if (next !== "home" && next !== "select" && next !== "play" && next !== "table") next = "home";
 
     applyChrome(next);
     if (next !== "play" && window.Times99Quiz && Times99Quiz.abortClip) {
@@ -142,6 +150,9 @@
     }
     if (next === "play" && window.Times99Quiz) {
       Times99Quiz.onShow(level, { fresh: historyMode !== "pop" });
+    }
+    if (next === "table" && window.Times99Table) {
+      Times99Table.onShow(level);
     }
     if (historyMode === "push" || historyMode === "replace") paintUrl(next, level, historyMode);
     current = { view: next, n: next === "home" ? "" : level };
@@ -165,6 +176,18 @@
       { view: "select", n: level, canBack: !!prev.canBack },
       "",
       buildUrl("select", level)
+    );
+  }
+
+  function syncTableUrl(n) {
+    if (current.view !== "table") return;
+    const page = /^[1-9]$/.test(String(n || "")) ? String(n) : "1";
+    current.n = page;
+    const prev = history.state || {};
+    history.replaceState(
+      { view: "table", n: page, canBack: !!prev.canBack },
+      "",
+      buildUrl("table", page)
     );
   }
 
@@ -224,6 +247,7 @@
       return;
     }
     if (document.body.dataset.view === "play") goBack("select", current.n);
+    if (document.body.dataset.view === "table") goBack("home");
   });
 
   document.addEventListener("pointerdown", () => {
@@ -237,6 +261,9 @@
     if (route.view === "play" && window.Times99Quiz) {
       Times99Quiz.onShow(route.n, { fresh: false });
     }
+    if (route.view === "table" && window.Times99Table) {
+      Times99Table.onShow(route.n);
+    }
     current = route;
   });
 
@@ -247,6 +274,7 @@
     syncBgm,
     holdBgm,
     syncSelectUrl,
+    syncTableUrl,
     openSettings() { openDlg(settingsDlg); },
     openParents() { openDlg(parentsDlg); },
     toast: showToast,

@@ -20,4 +20,9 @@
       Times99.show("select", "", "push");
     }, 140);
   });
+
+  document.querySelector("#table-btn").addEventListener("click", () => {
+    Times99.syncBgm();
+    Times99.show("table", "1", "push");
+  });
 })();

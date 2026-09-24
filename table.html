@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>99乘法表 · 趣味九九乘法表</title>
+  <script>
+    (function () {
+      var n = new URLSearchParams(location.search).get("n") || "1";
+      if (!/^[1-9]$/.test(n)) n = "1";
+      location.replace("index.html?view=table&n=" + encodeURIComponent(n));
+    })();
+  </script>
+</head>
+<body>
+  <p><a href="index.html?view=table&n=1">99乘法表</a></p>
+</body>
+</html>
