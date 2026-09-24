@@ -18,6 +18,10 @@
   const resultDog = $("#result-dog");
   const DOGS = ["assets/review-yellow.png", "assets/review-white.png"];
   const WIN_DOGS = ["assets/win-yellow.png", "assets/win-white.png"];
+  const clipEl = $("#win-clip");
+  const clipVideos = [$("#win-clip-yellow"), $("#win-clip-white")].filter(Boolean);
+  const CLIP_SRCS = ["assets/win-clip-yellow.mp4?v=1", "assets/win-clip-white.mp4?v=1"];
+  let clipToken = 0;
   function preloadSet(list) {
     return list.map((src) => {
       const img = new Image();
@@ -32,6 +36,17 @@
   }
   const reviewReady = preloadSet(DOGS);
   const winReady = preloadSet(WIN_DOGS);
+
+  function preloadClips() {
+    clipVideos.forEach((v, i) => {
+      const src = CLIP_SRCS[i];
+      if (!src) return;
+      if (v.getAttribute("src") !== src) {
+        v.preload = "auto";
+        v.src = src;
+      }
+    });
+  }
 
   let n = "";
   let isMix = false;
@@ -259,6 +274,131 @@
     });
   }
 
+  function showPerfectResult() {
+    resultCelebrate.hidden = false;
+    resultEl.classList.add("is-perfect", "is-arriving");
+    bodyEl.hidden = true;
+    resultEl.hidden = false;
+    view.classList.add("is-done");
+    view.classList.remove("is-clip");
+    placeWinDog();
+  }
+
+  function prepareWinDog() {
+    if (!resultDog.getAttribute("src")) resultDog.src = WIN_DOGS[0];
+    const src = resultDog.getAttribute("src");
+    const idx = Math.max(0, WIN_DOGS.indexOf(src));
+    return Promise.race([
+      Promise.all([winReady[idx] || Promise.resolve(), dogReady()]).then(async () => {
+        if (resultDog.decode) {
+          try { await resultDog.decode(); } catch (e) { /* 解碼失敗仍顯示文字 */ }
+        }
+      }),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ]);
+  }
+
+  function stopClipVideos() {
+    clipVideos.forEach((v) => {
+      v.onended = null;
+      v.onerror = null;
+      v.pause();
+      try { v.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    });
+  }
+
+  function releaseClipBgm() {
+    if (window.Times99 && Times99.holdBgm) Times99.holdBgm(false);
+  }
+
+  function abortClip() {
+    clipToken += 1;
+    if (clipEl) {
+      clipEl.classList.remove("is-live", "is-leaving");
+      clipEl.setAttribute("aria-hidden", "true");
+    }
+    view.classList.remove("is-clip");
+    stopClipVideos();
+    releaseClipBgm();
+  }
+
+  function playPerfectClip() {
+    const myRun = runId;
+    const myClip = ++clipToken;
+    const pick = Math.floor(Math.random() * clipVideos.length);
+    const video = clipVideos[pick];
+    const dogPromise = prepareWinDog();
+    if (!video || !clipEl) {
+      revealPerfect();
+      return;
+    }
+
+    clipVideos.forEach((v, i) => {
+      v.hidden = i !== pick;
+    });
+    const sound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
+    video.muted = !sound;
+    video.playsInline = true;
+    try { video.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    clipEl.classList.add("is-live");
+    clipEl.classList.remove("is-leaving");
+    clipEl.setAttribute("aria-hidden", "false");
+    view.classList.add("is-clip");
+    bodyEl.hidden = true;
+    if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
+
+    let settled = false;
+    const done = new Promise((resolve) => {
+      const finishClip = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      let playTimer = 0;
+      const armEnd = () => {
+        if (playTimer || settled) return;
+        const dur = Number.isFinite(video.duration) && video.duration > 0.5 ? video.duration : 4.05;
+        playTimer = window.setTimeout(finishClip, dur * 1000 + 700);
+      };
+      video.onended = finishClip;
+      video.onerror = finishClip;
+      video.onplaying = armEnd;
+      const started = video.play();
+      if (started && typeof started.then === "function") {
+        started.then(armEnd).catch(() => {
+          video.muted = true;
+          const retry = video.play();
+          if (retry && typeof retry.then === "function") {
+            retry.then(armEnd).catch(() => window.setTimeout(finishClip, 350));
+          } else {
+            window.setTimeout(finishClip, 350);
+          }
+        });
+      }
+      window.setTimeout(() => {
+        if (!settled && video.currentTime < 0.15 && video.paused) finishClip();
+      }, 1800);
+    });
+
+    done.then(async () => {
+      if (myRun !== runId || myClip !== clipToken) return;
+      await Promise.race([
+        dogPromise,
+        new Promise((resolve) => setTimeout(resolve, 400)),
+      ]);
+      if (myRun !== runId || myClip !== clipToken) return;
+      showPerfectResult();
+      clipEl.classList.add("is-leaving");
+      window.setTimeout(() => {
+        if (myRun !== runId || myClip !== clipToken) return;
+        clipEl.classList.remove("is-live", "is-leaving");
+        clipEl.setAttribute("aria-hidden", "true");
+        video.pause();
+        releaseClipBgm();
+      }, 320);
+    });
+  }
+
   async function revealPerfect() {
     const my = revealId;
     if (!resultDog.getAttribute("src")) resultDog.src = WIN_DOGS[0];
@@ -294,7 +434,7 @@
     if (correct === TOTAL) {
       $("#score-line").textContent = `${who}全部答對 ${correct} 題`;
       $("#score-sub").textContent = "太厲害了！";
-      revealPerfect();
+      playPerfectClip();
       return;
     }
 
@@ -323,6 +463,10 @@
       correct += 1;
       index += 1;
       setMeter();
+      if (correct === TOTAL) {
+        finish();
+        return;
+      }
       const my = runId;
       window.setTimeout(() => {
         if (my !== runId) return;
@@ -355,6 +499,8 @@
     bodyEl.hidden = false;
     hideRemember();
     hideWinDog();
+    abortClip();
+    preloadClips();
     view.classList.remove("is-done");
     primeWinDog();
     primeReviewDog();
@@ -397,5 +543,6 @@
       if (!fresh && hasRun && activeN === String(nextN)) return;
       begin(nextN);
     },
+    abortClip,
   };
 })();

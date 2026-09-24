@@ -32,8 +32,10 @@
     return soundBtn.getAttribute("aria-pressed") === "true";
   }
 
+  let bgmHeld = false;
+
   function syncBgm() {
-    if (!bgm) return;
+    if (!bgm || bgmHeld) return;
     if (!soundOn()) {
       if (!bgm.paused) bgm.pause();
       return;
@@ -41,6 +43,16 @@
     if (!bgm.paused) return;
     const p = bgm.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
+  }
+
+  function holdBgm(hold) {
+    bgmHeld = !!hold;
+    if (!bgm) return;
+    if (bgmHeld) {
+      if (!bgm.paused) bgm.pause();
+      return;
+    }
+    syncBgm();
   }
 
   function openDlg(el) {
@@ -121,6 +133,9 @@
     if (next !== "home" && next !== "select" && next !== "play") next = "home";
 
     applyChrome(next);
+    if (next !== "play" && window.Times99Quiz && Times99Quiz.abortClip) {
+      Times99Quiz.abortClip();
+    }
     if (next === "select" && window.Times99Select) {
       Times99Select.onShow(level);
       if (!level) level = Times99Select.selected();
@@ -230,6 +245,7 @@
     show,
     goBack,
     syncBgm,
+    holdBgm,
     syncSelectUrl,
     openSettings() { openDlg(settingsDlg); },
     openParents() { openDlg(parentsDlg); },

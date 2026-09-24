@@ -28,7 +28,7 @@
   <link rel="preload" as="image" href="assets/review-yellow.png">
   <link rel="preload" as="image" href="assets/review-white.png">
   <link rel="stylesheet" href="styles.css?v=2">
-  <link rel="stylesheet" href="game.css?v=5">
+  <link rel="stylesheet" href="game.css?v=6">
 </head>
 <body>
   <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
@@ -131,6 +131,11 @@
       <button class="quiz-map" id="back-map" type="button">回關卡地圖</button>
     </section>
 
+    <div class="win-clip" id="win-clip" aria-hidden="true">
+      <video class="win-clip-video" id="win-clip-yellow" playsinline webkit-playsinline preload="none"></video>
+      <video class="win-clip-video" id="win-clip-white" playsinline webkit-playsinline preload="none" hidden></video>
+    </div>
+
     <div class="remember" id="remember" hidden>
       <div class="remember-card">
         <p class="remember-kicker">記住這個算式</p>
@@ -178,10 +183,10 @@
   </div>
 
   <div class="toast" id="toast" role="status"></div>
-  <script src="shell.js?v=1"></script>
+  <script src="shell.js?v=2"></script>
   <script src="app.js?v=3"></script>
   <script src="select.js?v=3"></script>
-  <script src="play.js?v=9"></script>
+  <script src="play.js?v=10"></script>
   <script>Times99.boot()</script>
 </body>
 </html>
