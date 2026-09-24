@@ -640,18 +640,12 @@
   transition: opacity 320ms ease, transform 320ms ease;
 }
 
-.win-clip-video {
+.win-clip-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  background: transparent;
-}
-
-.win-clip-video[hidden] {
-  display: none !important;
+  display: block;
 }
 
 .quiz-result.is-arriving {

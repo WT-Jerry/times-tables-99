@@ -27,12 +27,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/win-yellow.png">
-  <link rel="preload" as="image" href="assets/win-white.png">
+  <link rel="preload" as="image" href="assets/win-clip-yellow-sheet.jpg?v=1">
+  <link rel="preload" as="image" href="assets/win-clip-white-sheet.jpg?v=1">
   <link rel="preload" as="image" href="assets/review-yellow.png">
   <link rel="preload" as="image" href="assets/review-white.png">
   <link rel="stylesheet" href="styles.css?v=4">
-  <link rel="stylesheet" href="game.css?v=10">
+  <link rel="stylesheet" href="game.css?v=11">
 </head>
 <body>
   <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
@@ -159,9 +159,9 @@
     </section>
 
     <div class="win-clip" id="win-clip" aria-hidden="true">
-      <video class="win-clip-video" id="win-clip-yellow" playsinline webkit-playsinline preload="none"></video>
-      <video class="win-clip-video" id="win-clip-white" playsinline webkit-playsinline preload="none" hidden></video>
+      <canvas class="win-clip-canvas" id="win-clip-canvas"></canvas>
     </div>
+    <audio id="win-clip-audio" preload="auto" playsinline></audio>
 
     <div class="remember" id="remember" hidden>
       <div class="remember-card">
@@ -213,7 +213,7 @@
   <script src="shell.js?v=3"></script>
   <script src="app.js?v=4"></script>
   <script src="select.js?v=3"></script>
-  <script src="play.js?v=11"></script>
+  <script src="play.js?v=12"></script>
   <script src="table.js?v=2"></script>
   <script>Times99.boot()</script>
 </body>
