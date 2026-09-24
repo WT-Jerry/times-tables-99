@@ -32,7 +32,7 @@
   <link rel="preload" as="image" href="assets/review-yellow.png">
   <link rel="preload" as="image" href="assets/review-white.png">
   <link rel="stylesheet" href="styles.css?v=4">
-  <link rel="stylesheet" href="game.css?v=8">
+  <link rel="stylesheet" href="game.css?v=9">
 </head>
 <body>
   <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
@@ -89,22 +89,23 @@
 
   <main class="stage table-page" id="view-table" hidden>
     <header class="table-top">
-      <button class="quiz-back" id="table-back" type="button" aria-label="回主畫面">
+      <button class="quiz-back" id="table-back" type="button" aria-label="回上一頁">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M15.5 5.5 8 12l7.5 6.5 1.4-1.6L11.2 12l5.7-4.9z"/>
         </svg>
       </button>
-      <h1>99乘法表</h1>
-      <button class="table-cover" id="table-cover" type="button" aria-pressed="false">蓋答案</button>
+      <h1 id="table-heading">1 的乘法表</h1>
+      <span class="table-top-pad" aria-hidden="true"></span>
     </header>
-    <div class="table-tabs" id="table-tabs" role="tablist" aria-label="選擇幾的乘法"></div>
-    <div class="table-body" id="table-body">
-      <p class="table-kicker" id="table-kicker">1 的乘法</p>
-      <ol class="table-eqs" id="table-eqs"></ol>
+    <div class="table-tabs" id="table-tabs" role="tablist" aria-label="切換 1 到 9 的乘法表"></div>
+    <div class="table-body">
+      <section class="table-card">
+        <h2 id="table-kicker">1 的乘法表</h2>
+        <ol class="table-eqs" id="table-eqs"></ol>
+      </section>
     </div>
-    <div class="table-nav">
-      <button class="table-step" id="table-prev" type="button">上一頁</button>
-      <button class="table-step" id="table-next" type="button">下一頁</button>
+    <div class="table-dock">
+      <button class="table-map" id="table-map" type="button">回關卡地圖</button>
     </div>
   </main>
 
@@ -213,7 +214,7 @@
   <script src="app.js?v=4"></script>
   <script src="select.js?v=3"></script>
   <script src="play.js?v=10"></script>
-  <script src="table.js?v=1"></script>
+  <script src="table.js?v=2"></script>
   <script>Times99.boot()</script>
 </body>
 </html>
