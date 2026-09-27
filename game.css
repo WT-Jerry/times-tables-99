@@ -53,6 +53,18 @@
   animation: map-needle 3.4s ease-in-out infinite;
 }
 
+.map-go {
+  position: absolute;
+  z-index: 10;
+  left: 20.05%;
+  top: 88.53%;
+  width: 60.03%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 @keyframes map-float-a {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-11px); }
