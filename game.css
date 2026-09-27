@@ -12,72 +12,13 @@
   margin: 0 auto;
 }
 
-.shot > .shot-plate {
+.shot > img {
   display: block;
   width: 100%;
   height: auto;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-}
-
-.map-float,
-.map-needle {
-  position: absolute;
-  z-index: 6;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.map-float-a {
-  left: 2.86%;
-  top: 70.08%;
-  width: 32.03%;
-  animation: map-float-a 2.8s ease-in-out infinite;
-}
-
-.map-float-b {
-  left: 55.99%;
-  top: 77.67%;
-  width: 39.06%;
-  animation: map-float-b 3.2s ease-in-out infinite;
-}
-
-.map-needle {
-  left: 77.73%;
-  top: 66.28%;
-  width: 12.5%;
-  transform-origin: 50% 50%;
-  animation: map-needle 3.4s ease-in-out infinite;
-}
-
-.map-go {
-  position: absolute;
-  z-index: 10;
-  left: 20.05%;
-  top: 88.53%;
-  width: 60.03%;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-@keyframes map-float-a {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-16px); }
-}
-
-@keyframes map-float-b {
-  0%, 100% { transform: translateY(-2px); }
-  50% { transform: translateY(-14px); }
-}
-
-@keyframes map-needle {
-  0%, 100% { transform: rotate(-24deg); }
-  50% { transform: rotate(30deg); }
 }
 
 .hit {
@@ -776,9 +717,6 @@
   .level.is-on { animation: none; }
   .win-clip.is-leaving { transition: none; }
   .quiz-result.is-arriving { animation: none; }
-  .map-float-a,
-  .map-float-b,
-  .map-needle { animation: none; }
 }
 
 .table-page {
