@@ -32,16 +32,16 @@
 }
 
 .map-float-a {
-  left: 6.38%;
-  top: 75.04%;
-  width: 41.54%;
+  left: 2.86%;
+  top: 70.08%;
+  width: 32.03%;
   animation: map-float-a 2.8s ease-in-out infinite;
 }
 
 .map-float-b {
-  left: 55.6%;
-  top: 80.62%;
-  width: 43.75%;
+  left: 55.99%;
+  top: 77.67%;
+  width: 39.06%;
   animation: map-float-b 3.2s ease-in-out infinite;
 }
 
@@ -67,11 +67,11 @@
 
 @keyframes map-float-a {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-11px); }
+  50% { transform: translateY(-16px); }
 }
 
 @keyframes map-float-b {
-  0%, 100% { transform: translateY(-3px); }
+  0%, 100% { transform: translateY(-2px); }
   50% { transform: translateY(-14px); }
 }
 
