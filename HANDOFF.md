@@ -26,7 +26,7 @@
 
 1. `#view-home` 主畫面：森林壁紙 + 兩隻可愛狗狗 +「玩」。點畫面任何地方播 BGM。
 2. 「玩」呼叫 `Times99.show("select")`，不走 `location.href`。
-3. `#view-select` 選關：底圖 `assets/select-plate.jpg?v=1`，兩隻狗與指針是疊上去的動畫。一次只能選一顆。
+3. `#view-select` 選關：底圖 `assets/select-plate.jpg?v=2`，兩隻狗與指針是疊上去的動畫。一次只能選一顆。
 4. 「開始挑戰」→ `Times99.show("play", n)`。網址是 `index.html?view=play&n=1`…`9` 或 `n=mix`。沒選就提示「先點一個號碼球喔！」。
 5. 返回鍵用 `history.back()`。`select.html`、`play.html` 只給舊連結，進站就 `location.replace` 回殼。
 
