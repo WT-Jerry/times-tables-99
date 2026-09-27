@@ -26,7 +26,7 @@
 
 1. `#view-home` 主畫面：森林壁紙 + 兩隻可愛狗狗 +「玩」。點畫面任何地方播 BGM。
 2. 「玩」呼叫 `Times99.show("select")`，不走 `location.href`。
-3. `#view-select` 選關：套 `assets/select-ref.jpg?v=2`（含紅球問號）。一次只能選一顆。
+3. `#view-select` 選關：底圖 `assets/select-plate.jpg?v=1`，兩隻狗與指針是疊上去的動畫。一次只能選一顆。
 4. 「開始挑戰」→ `Times99.show("play", n)`。網址是 `index.html?view=play&n=1`…`9` 或 `n=mix`。沒選就提示「先點一個號碼球喔！」。
 5. 返回鍵用 `history.back()`。`select.html`、`play.html` 只給舊連結，進站就 `location.replace` 回殼。
 
@@ -36,7 +36,7 @@
 - 切主頁／選關／測驗時同一個元素繼續播，`currentTime` 不歸零。
 - 設定「音效」關掉就停，再開從原秒數接。
 - iPhone 第一次若被擋，點一下畫面會接上；接上之後換畫面不會再斷。
-- 快取：`styles.css?v=4`、`game.css?v=11`、`shell.js?v=3`、`app.js?v=4`、`select.js?v=3`、`play.js?v=13`、`table.js?v=2`。改檔要再加版本。
+- 快取：`styles.css?v=4`、`game.css?v=12`、`shell.js?v=3`、`app.js?v=4`、`select.js?v=3`、`play.js?v=13`、`table.js?v=2`。改檔要再加版本。
 
 ## 選關
 
@@ -44,6 +44,7 @@
 - 問號關 `data-n="mix"`：未選是圖上的紅球問號；選中變成粉紫金色特殊問號球，不是黃燈。
 - 熱區大約（相對 `.shot`）：9 在 44.2% / 70.8%，問號在 62.2% / 70.9%。
 - 高一點的手機底下多一截草地是原圖比例，不要再畫一層。
+- 兩隻狗浮動、指南針指針擺動：原圖拆成 `select-plate.jpg` 加 `select-float-a.png` / `select-float-b.png` / `select-needle.png`。不要重畫地圖。狗 `pointer-events: none`，不能擋「開始挑戰」。指針只轉針，字母和刻度留在底圖。`prefers-reduced-motion` 要停。
 
 ## 測驗（play.html / play.js）
 

@@ -12,13 +12,60 @@
   margin: 0 auto;
 }
 
-.shot > img {
+.shot > .shot-plate {
   display: block;
   width: 100%;
   height: auto;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.map-float,
+.map-needle {
+  position: absolute;
+  z-index: 6;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.map-float-a {
+  left: 6.38%;
+  top: 75.04%;
+  width: 41.54%;
+  animation: map-float-a 2.8s ease-in-out infinite;
+}
+
+.map-float-b {
+  left: 55.6%;
+  top: 80.62%;
+  width: 43.75%;
+  animation: map-float-b 3.2s ease-in-out infinite;
+}
+
+.map-needle {
+  left: 77.73%;
+  top: 66.28%;
+  width: 12.5%;
+  transform-origin: 50% 50%;
+  animation: map-needle 3.4s ease-in-out infinite;
+}
+
+@keyframes map-float-a {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-11px); }
+}
+
+@keyframes map-float-b {
+  0%, 100% { transform: translateY(-3px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes map-needle {
+  0%, 100% { transform: rotate(-24deg); }
+  50% { transform: rotate(30deg); }
 }
 
 .hit {
@@ -717,6 +764,9 @@
   .level.is-on { animation: none; }
   .win-clip.is-leaving { transition: none; }
   .quiz-result.is-arriving { animation: none; }
+  .map-float-a,
+  .map-float-b,
+  .map-needle { animation: none; }
 }
 
 .table-page {
