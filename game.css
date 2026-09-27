@@ -12,13 +12,30 @@
   margin: 0 auto;
 }
 
-.shot > img {
+.shot > .shot-plate {
   display: block;
   width: 100%;
   height: auto;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.map-needle {
+  position: absolute;
+  z-index: 6;
+  left: 76.82%;
+  top: 65.74%;
+  width: 14.32%;
+  height: auto;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  animation: map-needle 3.4s ease-in-out infinite;
+}
+
+@keyframes map-needle {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(22deg); }
 }
 
 .hit {
@@ -717,6 +734,7 @@
   .level.is-on { animation: none; }
   .win-clip.is-leaving { transition: none; }
   .quiz-result.is-arriving { animation: none; }
+  .map-needle { animation: none; }
 }
 
 .table-page {
