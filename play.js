@@ -21,16 +21,17 @@
   const clipEl = $("#win-clip");
   const clipCanvas = $("#win-clip-canvas");
   const clipAudio = $("#win-clip-audio");
-  const CLIP_SHEETS = ["assets/win-clip-yellow-sheet.jpg?v=1", "assets/win-clip-white-sheet.jpg?v=1"];
-  const CLIP_AUDIO = ["assets/win-clip-yellow.m4a?v=1", "assets/win-clip-white.m4a?v=1"];
   const CLIP_COLS = 8;
-  const CLIP_ROWS = 4;
-  const CLIP_FRAMES = 32;
-  const CLIP_MS = 4000;
-  const sheetImgs = CLIP_SHEETS.map((src) => {
+  const CLIPS = [
+    { sheet: "assets/win-clip-yellow-sheet.jpg?v=1", audio: "assets/win-clip-yellow.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
+    { sheet: "assets/win-clip-white-sheet.jpg?v=1", audio: "assets/win-clip-white.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
+    { sheet: "assets/win-clip-stage-sheet.jpg?v=1", audio: "assets/win-clip-stage.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
+    { sheet: "assets/win-clip-party-sheet.jpg?v=1", audio: "assets/win-clip-party.m4a?v=1", ms: 5000, frames: 40, rows: 5 },
+  ];
+  const sheetImgs = CLIPS.map((clip) => {
     const img = new Image();
     img.decoding = "async";
-    img.src = src;
+    img.src = clip.sheet;
     return img;
   });
   let clipToken = 0;
@@ -53,12 +54,12 @@
 
   function preloadClips() {
     sheetImgs.forEach((img, i) => {
-      if (img.getAttribute("src") !== CLIP_SHEETS[i]) img.src = CLIP_SHEETS[i];
+      if (img.getAttribute("src") !== CLIPS[i].sheet) img.src = CLIPS[i].sheet;
     });
-    CLIP_AUDIO.forEach((src) => {
+    CLIPS.forEach((clip) => {
       const warm = new Audio();
       warm.preload = "auto";
-      warm.src = src;
+      warm.src = clip.audio;
     });
   }
 
@@ -323,7 +324,7 @@
     }
   }
 
-  function drawClipFrame(img, frame) {
+  function drawClipFrame(img, frame, rows) {
     if (!clipCanvas || !img || !img.naturalWidth) return false;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = Math.max(1, clipEl.clientWidth);
@@ -335,7 +336,7 @@
       clipCanvas.height = ph;
     }
     const fw = img.naturalWidth / CLIP_COLS;
-    const fh = img.naturalHeight / CLIP_ROWS;
+    const fh = img.naturalHeight / rows;
     const col = frame % CLIP_COLS;
     const row = Math.floor(frame / CLIP_COLS);
     const ctx = clipCanvas.getContext("2d");
@@ -364,8 +365,11 @@
   function playPerfectClip() {
     const myRun = runId;
     const myClip = ++clipToken;
-    const pick = Math.floor(Math.random() * CLIP_SHEETS.length);
+    const pick = Math.floor(Math.random() * CLIPS.length);
+    const clip = CLIPS[pick];
     const img = sheetImgs[pick];
+    const clipMs = clip.ms;
+    const clipFrames = clip.frames;
     const dogPromise = prepareWinDog();
     if (!clipEl || !clipCanvas) {
       revealPerfect();
@@ -374,7 +378,7 @@
     const wantSound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
     if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
     if (wantSound && clipAudio) {
-      clipAudio.src = CLIP_AUDIO[pick];
+      clipAudio.src = clip.audio;
       clipAudio.muted = false;
       const started = clipAudio.play();
       if (started && typeof started.catch === "function") started.catch(() => {});
@@ -389,15 +393,15 @@
     const startedAt = performance.now();
     const step = (now) => {
       if (myRun !== runId || myClip !== clipToken) return;
-      const t = Math.min(CLIP_MS, now - startedAt);
-      const frame = Math.min(CLIP_FRAMES - 1, Math.floor((t / CLIP_MS) * CLIP_FRAMES));
-      drawClipFrame(img, frame);
-      if (t < CLIP_MS) clipRaf = window.requestAnimationFrame(step);
+      const t = Math.min(clipMs, now - startedAt);
+      const frame = Math.min(clipFrames - 1, Math.floor((t / clipMs) * clipFrames));
+      drawClipFrame(img, frame, clip.rows);
+      if (t < clipMs) clipRaf = window.requestAnimationFrame(step);
     };
     clipRaf = window.requestAnimationFrame(step);
 
     const done = new Promise((resolve) => {
-      clipTimer = window.setTimeout(resolve, CLIP_MS);
+      clipTimer = window.setTimeout(resolve, clipMs);
     });
 
     done.then(async () => {
