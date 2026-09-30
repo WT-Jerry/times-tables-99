@@ -27,14 +27,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/win-clip-yellow-sheet.jpg?v=1">
-  <link rel="preload" as="image" href="assets/win-clip-white-sheet.jpg?v=1">
-  <link rel="preload" as="image" href="assets/win-clip-stage-sheet.jpg?v=1">
-  <link rel="preload" as="image" href="assets/win-clip-party-sheet.jpg?v=1">
   <link rel="preload" as="image" href="assets/review-yellow.png">
   <link rel="preload" as="image" href="assets/review-white.png">
   <link rel="stylesheet" href="styles.css?v=4">
-  <link rel="stylesheet" href="game.css?v=19">
+  <link rel="stylesheet" href="game.css?v=20">
 </head>
 <body>
   <audio id="bgm" src="assets/bgm.mp3?v=3" loop preload="auto" autoplay playsinline></audio>
@@ -160,6 +156,7 @@
       <button class="quiz-map" id="back-map" type="button">回關卡地圖</button>
     </section>
 
+    <video class="win-clip-video" id="win-clip-video" playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback></video>
     <div class="win-clip" id="win-clip" aria-hidden="true">
       <canvas class="win-clip-canvas" id="win-clip-canvas"></canvas>
     </div>
@@ -215,7 +212,7 @@
   <script src="shell.js?v=3"></script>
   <script src="app.js?v=4"></script>
   <script src="select.js?v=3"></script>
-  <script src="play.js?v=13"></script>
+  <script src="play.js?v=14"></script>
   <script src="table.js?v=2"></script>
   <script>Times99.boot()</script>
 </body>

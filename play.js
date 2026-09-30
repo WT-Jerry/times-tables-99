@@ -20,23 +20,27 @@
   const WIN_DOGS = ["assets/win-yellow.png", "assets/win-white.png"];
   const clipEl = $("#win-clip");
   const clipCanvas = $("#win-clip-canvas");
+  const clipVideo = $("#win-clip-video");
   const clipAudio = $("#win-clip-audio");
   const CLIP_COLS = 8;
   const CLIPS = [
-    { sheet: "assets/win-clip-yellow-sheet.jpg?v=1", audio: "assets/win-clip-yellow.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
-    { sheet: "assets/win-clip-white-sheet.jpg?v=1", audio: "assets/win-clip-white.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
-    { sheet: "assets/win-clip-stage-sheet.jpg?v=1", audio: "assets/win-clip-stage.m4a?v=1", ms: 4000, frames: 32, rows: 4 },
-    { sheet: "assets/win-clip-party-sheet.jpg?v=1", audio: "assets/win-clip-party.m4a?v=1", ms: 5000, frames: 40, rows: 5 },
+    { file: "assets/win-clip-yellow.mp4?v=2", sheet: "assets/win-clip-yellow-sheet.jpg?v=1", audio: "assets/win-clip-yellow.m4a?v=1", ms: 4033, frames: 32, rows: 4 },
+    { file: "assets/win-clip-white.mp4?v=2", sheet: "assets/win-clip-white-sheet.jpg?v=1", audio: "assets/win-clip-white.m4a?v=1", ms: 4033, frames: 32, rows: 4 },
+    { file: "assets/win-clip-stage.mp4?v=2", sheet: "assets/win-clip-stage-sheet.jpg?v=1", audio: "assets/win-clip-stage.m4a?v=1", ms: 4033, frames: 32, rows: 4 },
+    { file: "assets/win-clip-party.mp4?v=2", sheet: "assets/win-clip-party-sheet.jpg?v=1", audio: "assets/win-clip-party.m4a?v=1", ms: 5033, frames: 40, rows: 5 },
   ];
-  const sheetImgs = CLIPS.map((clip) => {
+  const sheetImgs = CLIPS.map(() => {
     const img = new Image();
     img.decoding = "async";
-    img.src = clip.sheet;
     return img;
   });
+  let picked = 0;
+  let clipPrimed = false;
+  let primeToken = 0;
   let clipToken = 0;
   let clipRaf = 0;
   let clipTimer = 0;
+  let clipSettled = false;
   function preloadSet(list) {
     return list.map((src) => {
       const img = new Image();
@@ -52,15 +56,48 @@
   const reviewReady = preloadSet(DOGS);
   const winReady = preloadSet(WIN_DOGS);
 
+  function ensureSheet(i) {
+    const img = sheetImgs[i];
+    if (img.getAttribute("src") !== CLIPS[i].sheet) img.src = CLIPS[i].sheet;
+    return img;
+  }
+
+  function pickClip() {
+    picked = Math.floor(Math.random() * CLIPS.length);
+    clipPrimed = false;
+    primeToken += 1;
+    if (!clipVideo) return;
+    const clip = CLIPS[picked];
+    clipVideo.classList.remove("is-showing", "is-leaving");
+    clipVideo.preload = "auto";
+    clipVideo.playsInline = true;
+    clipVideo.setAttribute("playsinline", "");
+    clipVideo.setAttribute("webkit-playsinline", "");
+    clipVideo.muted = true;
+    if (clipVideo.getAttribute("src") !== clip.file) clipVideo.src = clip.file;
+    clipVideo.load();
+  }
+
+  function primeClipBuffer() {
+    if (!clipVideo || clipPrimed) return;
+    clipPrimed = true;
+    const token = primeToken;
+    clipVideo.muted = true;
+    const started = clipVideo.play();
+    const park = () => {
+      if (token !== primeToken) return;
+      clipVideo.pause();
+      try { clipVideo.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    };
+    if (started && typeof started.then === "function") {
+      started.then(() => window.setTimeout(park, 80)).catch(() => {});
+    } else {
+      window.setTimeout(park, 80);
+    }
+  }
+
   function preloadClips() {
-    sheetImgs.forEach((img, i) => {
-      if (img.getAttribute("src") !== CLIPS[i].sheet) img.src = CLIPS[i].sheet;
-    });
-    CLIPS.forEach((clip) => {
-      const warm = new Audio();
-      warm.preload = "auto";
-      warm.src = clip.audio;
-    });
+    pickClip();
   }
 
   let n = "";
@@ -322,6 +359,11 @@
       clipAudio.pause();
       try { clipAudio.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
     }
+    if (clipVideo) {
+      clipVideo.pause();
+      clipVideo.classList.remove("is-showing", "is-leaving");
+      try { clipVideo.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    }
   }
 
   function drawClipFrame(img, frame, rows) {
@@ -352,9 +394,11 @@
   }
 
   function abortClip() {
+    primeToken += 1;
     clipToken += 1;
+    clipSettled = true;
     if (clipEl) {
-      clipEl.classList.remove("is-live", "is-leaving");
+      clipEl.classList.remove("is-live", "is-leaving", "is-video");
       clipEl.setAttribute("aria-hidden", "true");
     }
     view.classList.remove("is-clip");
@@ -362,65 +406,107 @@
     releaseClipBgm();
   }
 
-  function playPerfectClip() {
-    const myRun = runId;
-    const myClip = ++clipToken;
-    const pick = Math.floor(Math.random() * CLIPS.length);
-    const clip = CLIPS[pick];
-    const img = sheetImgs[pick];
-    const clipMs = clip.ms;
-    const clipFrames = clip.frames;
-    const dogPromise = prepareWinDog();
-    if (!clipEl || !clipCanvas) {
-      revealPerfect();
-      return;
-    }
-    const wantSound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
-    if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
-    if (wantSound && clipAudio) {
-      clipAudio.src = clip.audio;
-      clipAudio.muted = false;
-      const started = clipAudio.play();
-      if (started && typeof started.catch === "function") started.catch(() => {});
-    }
+  function showClipChrome() {
     clipEl.classList.add("is-live");
     clipEl.classList.remove("is-leaving");
     clipEl.setAttribute("aria-hidden", "false");
     view.classList.add("is-clip");
     bodyEl.hidden = true;
     void clipEl.offsetWidth;
+  }
 
+  function finishClip(myRun, myClip, dogPromise) {
+    if (clipSettled || myRun !== runId || myClip !== clipToken) return;
+    clipSettled = true;
+    if (clipTimer) window.clearTimeout(clipTimer);
+    clipTimer = 0;
+    if (clipRaf) cancelAnimationFrame(clipRaf);
+    clipRaf = 0;
+    Promise.race([
+      dogPromise,
+      new Promise((resolve) => setTimeout(resolve, 400)),
+    ]).then(() => {
+      if (myRun !== runId || myClip !== clipToken) return;
+      showPerfectResult();
+      clipEl.classList.add("is-leaving");
+      if (clipVideo) clipVideo.classList.add("is-leaving");
+      window.setTimeout(() => {
+        if (myRun !== runId || myClip !== clipToken) return;
+        clipEl.classList.remove("is-live", "is-leaving", "is-video");
+        clipEl.setAttribute("aria-hidden", "true");
+        stopClipPlayback();
+        releaseClipBgm();
+      }, 320);
+    });
+  }
+
+  function playSheet(myRun, myClip, clip, img, dogPromise) {
+    clipEl.classList.remove("is-video");
+    if (clipVideo) clipVideo.classList.remove("is-showing", "is-leaving");
+    const wantSound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
+    if (wantSound && clipAudio) {
+      clipAudio.pause();
+      clipAudio.src = clip.audio;
+      clipAudio.muted = false;
+      const started = clipAudio.play();
+      if (started && typeof started.catch === "function") started.catch(() => {});
+    }
+    const clipMs = clip.ms;
+    const clipFrames = clip.frames;
     const startedAt = performance.now();
     const step = (now) => {
-      if (myRun !== runId || myClip !== clipToken) return;
+      if (myRun !== runId || myClip !== clipToken || clipSettled) return;
       const t = Math.min(clipMs, now - startedAt);
       const frame = Math.min(clipFrames - 1, Math.floor((t / clipMs) * clipFrames));
       drawClipFrame(img, frame, clip.rows);
       if (t < clipMs) clipRaf = window.requestAnimationFrame(step);
     };
     clipRaf = window.requestAnimationFrame(step);
+    clipTimer = window.setTimeout(() => finishClip(myRun, myClip, dogPromise), clipMs);
+  }
 
-    const done = new Promise((resolve) => {
-      clipTimer = window.setTimeout(resolve, clipMs);
-    });
-
-    done.then(async () => {
-      if (myRun !== runId || myClip !== clipToken) return;
-      await Promise.race([
-        dogPromise,
-        new Promise((resolve) => setTimeout(resolve, 400)),
-      ]);
-      if (myRun !== runId || myClip !== clipToken) return;
-      showPerfectResult();
-      clipEl.classList.add("is-leaving");
-      window.setTimeout(() => {
-        if (myRun !== runId || myClip !== clipToken) return;
-        clipEl.classList.remove("is-live", "is-leaving");
-        clipEl.setAttribute("aria-hidden", "true");
-        stopClipPlayback();
-        releaseClipBgm();
-      }, 320);
-    });
+  function playPerfectClip() {
+    const myRun = runId;
+    const myClip = ++clipToken;
+    primeToken += 1;
+    clipSettled = false;
+    const clip = CLIPS[picked] || CLIPS[0];
+    const img = ensureSheet(picked);
+    const dogPromise = prepareWinDog();
+    if (!clipEl) {
+      revealPerfect();
+      return;
+    }
+    const wantSound = window.Times99 && Times99.soundOn ? Times99.soundOn() : true;
+    if (window.Times99 && Times99.holdBgm) Times99.holdBgm(true);
+    showClipChrome();
+    if (!clipVideo) {
+      playSheet(myRun, myClip, clip, img, dogPromise);
+      return;
+    }
+    clipEl.classList.add("is-video");
+    clipVideo.classList.add("is-showing");
+    clipVideo.classList.remove("is-leaving");
+    clipVideo.muted = !wantSound;
+    clipVideo.volume = wantSound ? 1 : 0;
+    try { clipVideo.currentTime = 0; } catch (e) { /* 尚未可 seek */ }
+    const started = clipVideo.play();
+    if (started && typeof started.catch === "function") started.catch(() => {});
+    const mark = clipVideo.currentTime || 0;
+    const onEnded = () => finishClip(myRun, myClip, dogPromise);
+    clipVideo.addEventListener("ended", onEnded, { once: true });
+    clipTimer = window.setTimeout(() => {
+      if (myRun !== runId || myClip !== clipToken || clipSettled) return;
+      const moved = clipVideo.currentTime > mark + 0.12 && !clipVideo.paused;
+      if (!moved) {
+        clipVideo.removeEventListener("ended", onEnded);
+        clipVideo.pause();
+        playSheet(myRun, myClip, clip, img, dogPromise);
+        return;
+      }
+      const remain = Math.max(200, ((clipVideo.duration || clip.ms / 1000) - clipVideo.currentTime) * 1000 + 80);
+      clipTimer = window.setTimeout(() => finishClip(myRun, myClip, dogPromise), remain);
+    }, 700);
   }
 
   async function revealPerfect() {
@@ -473,10 +559,11 @@
 
   function onPick(btn, value) {
     if (locked) return;
-    locked = true;
     const item = questions[index];
     const ok = value === item.answer;
     const willWin = ok && correct + 1 === TOTAL;
+    if (!willWin) primeClipBuffer();
+    locked = true;
     if (!willWin) syncBgm();
     choicesEl.querySelectorAll(".quiz-choice").forEach((el) => {
       el.disabled = true;
